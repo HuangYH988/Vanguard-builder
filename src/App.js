@@ -1,0 +1,28 @@
+import logo from './logo.svg';
+import './App.css';
+import Error from './Error';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <p>A base app that can be used to build new projects or use as testground for packages</p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+          <Error />
+        </a>
+      </header>
+    </div>
+  );
+}
+
+export default App;
