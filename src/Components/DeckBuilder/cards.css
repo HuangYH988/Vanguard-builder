@@ -1,0 +1,21 @@
+.card-img {
+  width: 60px;
+  height: 80px; /* You can adjust the height as needed */
+  overflow: hidden; /* Hide any overflow if the image is larger */
+  border: 0px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.card-img img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.preview-image {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: 1;
+  width: 250px;
+  background-color: aliceblue;
+}
