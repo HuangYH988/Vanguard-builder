@@ -65,3 +65,11 @@ export const sample_cards = {
     CardAdvantage: 0,
   },
 };
+
+export const listOfDecks = {
+  1: {
+    name: "deck1",
+    deckList: ["1", "1", "1", "1", "2", "3", "3"],
+    rideDeckList: ["1"],
+  },
+};

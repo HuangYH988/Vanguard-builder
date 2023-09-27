@@ -1,7 +1,7 @@
 .card-img {
   position: relative; /* Set the container to relative positioning */
-  width: 60px;
-  height: 80px;
+  width: 100px;
+  height: 120px;
   overflow: hidden;
   border: 0px;
   background-color: rgba(0, 0, 0, 0);
@@ -14,15 +14,24 @@
 
 .ride-deck {
   position: absolute; /* Set the text to absolute positioning */
-  top: 0;
-  left: 0;
+  top: 45px;
+  left: 12px;
   z-index: 1;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.7
-  ); /* Add a background color for better visibility */
+  color: rgb(186, 223, 245);
+  border: 1px solid white;
+  background-color: rgb(56, 43, 43);
+  width: 70px;
+  padding: 2px; /* Add some padding to the text */
+}
+.num-in-deck {
+  position: absolute; /* Set the text to absolute positioning */
+  top: 75px;
+  left: 38px;
+  z-index: 1;
+  color: rgb(244, 196, 196);
+  border: 1px solid white;
+  background-color: rgb(39, 51, 62);
+  width: 20px;
   padding: 4px; /* Add some padding to the text */
 }
 

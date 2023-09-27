@@ -7,10 +7,10 @@ export default function HomePage() {
       <h1>This the Home Page</h1>
       <h3>List of your decks:</h3>
       <button>
-        <Link to={`/analysis?deckid=1`}> Dummy deck 1</Link>
+        <Link to={`/analysis?deck=deck1`}> Dummy deck 1</Link>
       </button>
       <button>
-        <Link to={`/analysis?deckid=2`}> Dummy deck 2</Link>
+        <Link to={`/analysis?deck=2`}> Dummy deck 2</Link>
       </button>
       <br />
       <button>

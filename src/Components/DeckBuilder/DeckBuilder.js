@@ -10,6 +10,7 @@ export default function DeckBuild() {
   const [trigger, setTrigger] = useState(null);
 
   const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each button's state
+  const [numOfCards, setNumOfCards] = useState({});
 
   const onHover = (card) => {
     setHoveredImage(card.Image);
@@ -31,8 +32,17 @@ export default function DeckBuild() {
         ...prevState,
         [id]: true, // Set the state for this specific button to true
       }));
+    }
+    if (numOfCards[id]) {
+      setNumOfCards((prevState) => ({
+        ...prevState,
+        [id]: numOfCards[id] + 1,
+      }));
     } else {
-      console.log(id, "+1");
+      setNumOfCards((prevState) => ({
+        ...prevState,
+        [id]: 1,
+      }));
     }
   };
 
@@ -43,9 +53,38 @@ export default function DeckBuild() {
         ...prevState,
         [id]: false, // Set the state for this specific button to false
       }));
-    } else {
-      console.log(id, "-1");
     }
+    if (numOfCards[id] > 1) {
+      setNumOfCards((prevState) => ({
+        ...prevState,
+        [id]: numOfCards[id] - 1,
+      }));
+    } else {
+      setNumOfCards((prevState) => ({
+        ...prevState,
+        [id]: 0,
+      }));
+      setShowRideDeck((prevState) => ({
+        ...prevState,
+        [id]: false,
+      }));
+    }
+  };
+  const saveDeck = () => {
+    const deckList = [];
+    const rideDeckList = [];
+    for (const id in showRideDeck) {
+      if (showRideDeck[id]) {
+        rideDeckList.push(id);
+      }
+    }
+    for (const id in numOfCards) {
+      for (let i = 0; i < numOfCards[id]; i++) {
+        deckList.push(id);
+      }
+    }
+    console.log(deckList);
+    console.log(rideDeckList);
   };
 
   return (
@@ -74,11 +113,17 @@ export default function DeckBuild() {
         >
           <img src={card.Image} alt="card" />
           {showRideDeck[card.id] && <div className="ride-deck">Ride deck</div>}
+          {numOfCards[card.id] && numOfCards[card.id] !== 0 && (
+            <div className="num-in-deck">{numOfCards[card.id]}</div>
+          )}
         </button>
       ))}
 
       <br />
-      <button>Save deck</button>
+
+      <button onClick={() => saveDeck()}>
+        <Link to="/analysis">Save deck</Link>
+      </button>
       <button>
         <Link to="/">Back to homepage</Link>
       </button>
