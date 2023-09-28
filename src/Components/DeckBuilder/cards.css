@@ -51,3 +51,16 @@
 .preview-image img {
   max-width: 100%; /* Ensure the image doesn't exceed the container width */
 }
+
+.ride-display{
+  display: inline-block;
+  margin: 5px;
+}
+.trigger-display{
+  display: inline-block;
+  margin: 0px;
+}
+.main-display{
+  display: inline-block;
+  margin: 0px;
+}

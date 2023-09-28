@@ -62,7 +62,7 @@ export default function DeckBuild() {
     } else {
       setNumOfCards((prevState) => ({
         ...prevState,
-        [id]: 0,
+        [id]: null,
       }));
       setShowRideDeck((prevState) => ({
         ...prevState,
@@ -94,7 +94,7 @@ export default function DeckBuild() {
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
           {trigger ? <div>{trigger} trigger</div> : null}
-          {sentinel ? <h4>Sentinel</h4> : null}
+          {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
             <p>{hoveredEffect}</p>
           ) : (

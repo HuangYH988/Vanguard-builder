@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Error from "./Error";
 import HomePage from "./Components/Home";
-import Analysis from "./Components/DeckBuilder/Analysis";
+import Analysis from "./Components/DeckBuilder/Analysis/Analysis";
 import DeckBuild from "./Components/DeckBuilder/DeckBuilder";
 
 function App() {

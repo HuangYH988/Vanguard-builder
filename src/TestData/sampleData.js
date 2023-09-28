@@ -67,9 +67,15 @@ export const sample_cards = {
 };
 
 export const listOfDecks = {
-  1: {
-    name: "deck1",
+  0: {
+    id:0,
+    name: "example 1",
     deckList: ["1", "1", "1", "1", "2", "3", "3"],
     rideDeckList: ["1"],
-  },
+  },1: {
+    id:1,
+    name: "test2",
+    deckList: ["1", "1", "1", "1", "2", "2", "2", "2", "3"],
+    rideDeckList: ["1","2","3"],
+  }
 };
