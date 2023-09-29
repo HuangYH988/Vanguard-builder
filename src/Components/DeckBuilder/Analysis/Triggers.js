@@ -7,6 +7,7 @@ export default function Triggers(prop) {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
+  const [cardName, setCardName] = useState("");
   const [trigger, setTrigger] = useState(null);
   const [typeCount, setTypeCount] = useState({
     Crit: 0,
@@ -53,6 +54,7 @@ export default function Triggers(prop) {
         setHoveredEffect(data[card].Effect);
         setSentinel(data[card].isSentinel);
         setTrigger(data[card].Trigger);
+        setCardName(data[card].CardName);
         break;
       }
     }
@@ -63,12 +65,14 @@ export default function Triggers(prop) {
     setHoveredEffect(null);
     setSentinel(null);
     setTrigger(null);
+    setCardName("");
   };
   return (
     <div>
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
+          {cardName}
           {trigger ? <div>{trigger} trigger</div> : null}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
@@ -96,11 +100,22 @@ export default function Triggers(prop) {
       ))}
       <br />
       <div className="trig-count">
-        <div className="trig-count" id="crit">{typeCount.Crit}C </div>{" "}
-        <div className="trig-count" id="draw">{typeCount.Draw}D </div>{" "}
-        <div className="trig-count" id="front"> {typeCount.Front}F </div>{" "}
-        <div className="trig-count" id="heal">{typeCount.Heal}H </div>{" "}
-        <div className="trig-count" id="over">{typeCount.Over}O </div>{" "}
+        <div className="trig-count" id="crit">
+          {typeCount.Crit}C{" "}
+        </div>{" "}
+        <div className="trig-count" id="draw">
+          {typeCount.Draw}D{" "}
+        </div>{" "}
+        <div className="trig-count" id="front">
+          {" "}
+          {typeCount.Front}F{" "}
+        </div>{" "}
+        <div className="trig-count" id="heal">
+          {typeCount.Heal}H{" "}
+        </div>{" "}
+        <div className="trig-count" id="over">
+          {typeCount.Over}O{" "}
+        </div>{" "}
       </div>
     </div>
   );

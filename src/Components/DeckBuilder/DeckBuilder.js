@@ -8,6 +8,7 @@ export default function DeckBuild() {
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
   const [trigger, setTrigger] = useState(null);
+  const [cardName, setCardName] = useState("");
 
   const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each button's state
   const [numOfCards, setNumOfCards] = useState({});
@@ -17,6 +18,7 @@ export default function DeckBuild() {
     setHoveredEffect(card.Effect);
     setSentinel(card.isSentinel);
     setTrigger(card.Trigger);
+    setCardName(card.CardName);
   };
 
   const onHoverOut = () => {
@@ -24,6 +26,7 @@ export default function DeckBuild() {
     setHoveredEffect(null);
     setSentinel(null);
     setTrigger(null);
+    setCardName("");
   };
 
   const onClick = (event, id) => {
@@ -93,6 +96,7 @@ export default function DeckBuild() {
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
+          {cardName}
           {trigger ? <div>{trigger} trigger</div> : null}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (

@@ -8,6 +8,7 @@ export default function RideDeck(prop) {
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
   const [trigger, setTrigger] = useState(null);
+  const [cardName, setCardName] = useState("");
 
   const onHover = (id, data) => {
     const intId = parseInt(id, 10);
@@ -17,6 +18,7 @@ export default function RideDeck(prop) {
         setHoveredEffect(data[card].Effect);
         setSentinel(data[card].isSentinel);
         setTrigger(data[card].Trigger);
+        setCardName(data[card].CardName);
         break;
       }
     }
@@ -27,6 +29,7 @@ export default function RideDeck(prop) {
     setHoveredEffect(null);
     setSentinel(null);
     setTrigger(null);
+    setCardName("");
   };
 
   return (
@@ -34,6 +37,7 @@ export default function RideDeck(prop) {
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
+          {cardName}
           {trigger ? <div>{trigger} trigger</div> : null}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (

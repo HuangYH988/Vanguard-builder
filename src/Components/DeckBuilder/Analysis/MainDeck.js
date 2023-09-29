@@ -7,7 +7,7 @@ export default function MainDeck(prop) {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
-
+  const [cardName, setCardName] = useState("");
   const [collateNum, setCollateNum] = useState({});
 
   useEffect(() => {
@@ -22,18 +22,16 @@ export default function MainDeck(prop) {
 
   const remarks = (id, data) => {
     const intId = parseInt(id, 10);
-    const output=[];
+    const output = [];
     for (const card in data) {
       if (data[card].id === intId) {
-        
         if (data[card].isSentinel) {
           output.push("Sentinel");
-        } 
-        if (data[card].CardType !=="unit"){
+        }
+        if (data[card].CardType !== "unit") {
           output.push(data[card].CardType);
         }
         return output.length > 0 ? output.join(" ") : null;
-        
       }
     }
   };
@@ -44,7 +42,7 @@ export default function MainDeck(prop) {
         setHoveredImage(data[card].Image);
         setHoveredEffect(data[card].Effect);
         setSentinel(data[card].isSentinel);
-
+        setCardName(data[card].CardName);
         break;
       }
     }
@@ -54,13 +52,14 @@ export default function MainDeck(prop) {
     setHoveredImage(null);
     setHoveredEffect(null);
     setSentinel(null);
+    setCardName("");
   };
   return (
     <div>
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
-
+          {cardName}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
             <p>{hoveredEffect}</p>

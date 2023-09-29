@@ -36,7 +36,7 @@
 }
 
 .preview-image {
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
   z-index: 1;
@@ -52,36 +52,48 @@
   max-width: 100%; /* Ensure the image doesn't exceed the container width */
 }
 
-.ride-display{
+.ride-display {
   display: inline-block;
   margin: 5px;
 }
-.trigger-display{
+.trigger-display {
   display: inline-block;
   margin: 0px;
 }
-.trig-count{
+.trig-count {
   display: inline-block;
-  
-}.trig-count div {
+}
+.trig-count div {
   font-weight: bold;
   font-size: 32px; /* Adjust the size as needed */
   margin-right: 10px; /* Adjust the spacing between elements */
 }
-#crit{
+#crit {
   color: rgb(180, 178, 33);
 }
-#front{
+#front {
   color: rgb(141, 4, 118);
 }
-#draw{
+#draw {
   color: rgb(143, 6, 6);
 }
-#heal{
+#heal {
   color: rgb(54, 161, 22);
 }
-#over{
-  color: rgb(73, 73, 69);
+#over {
+  background: linear-gradient(
+    to right,
+    violet,
+    indigo,
+    blue,
+    green,
+    yellow,
+    orange,
+    red
+  );
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .deck-table {
@@ -90,7 +102,6 @@
   align-items: center;
   background-color: rgb(194, 241, 241);
   width: 80%;
-  
 }
 
 .deck-table table {
@@ -103,4 +114,5 @@
   border: 1px solid #2e2d2d; /* Border color */
   padding: 8px;
   text-align: left;
+  font-size: 20px;
 }
