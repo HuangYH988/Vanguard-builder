@@ -1,14 +1,42 @@
 import { sample_cards } from "../../../TestData/sampleData";
 import { renderImage, renderName } from "./Analysis";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function MainDeck(prop) {
   const { mainDeck } = prop;
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
-  const [trigger, setTrigger] = useState(null);
 
+  const [collateNum, setCollateNum] = useState({});
+
+  useEffect(() => {
+    const newCollateNum = mainDeck.reduce((acc, card) => {
+      const { id } = card;
+      acc[id] = (acc[id] || 0) + 1;
+      return acc;
+    }, {});
+
+    setCollateNum(newCollateNum);
+  }, [mainDeck]);
+
+  const remarks = (id, data) => {
+    const intId = parseInt(id, 10);
+    const output=[];
+    for (const card in data) {
+      if (data[card].id === intId) {
+        
+        if (data[card].isSentinel) {
+          output.push("Sentinel");
+        } 
+        if (data[card].CardType !=="unit"){
+          output.push(data[card].CardType);
+        }
+        return output.length > 0 ? output.join(" ") : null;
+        
+      }
+    }
+  };
   const onHover = (id, data) => {
     const intId = parseInt(id, 10);
     for (const card in data) {
@@ -16,7 +44,7 @@ export default function MainDeck(prop) {
         setHoveredImage(data[card].Image);
         setHoveredEffect(data[card].Effect);
         setSentinel(data[card].isSentinel);
-        setTrigger(data[card].Trigger);
+
         break;
       }
     }
@@ -26,14 +54,13 @@ export default function MainDeck(prop) {
     setHoveredImage(null);
     setHoveredEffect(null);
     setSentinel(null);
-    setTrigger(null);
   };
   return (
     <div>
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
-          {trigger ? <div>{trigger} trigger</div> : null}
+
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
             <p>{hoveredEffect}</p>
@@ -42,22 +69,41 @@ export default function MainDeck(prop) {
           )}
         </div>
       )}
-      {mainDeck.map((id, index) => (
-        <div key={"main" + index} className="main-display">
-          {sample_cards && (
-            <button
-              onMouseOver={() => onHover(id, sample_cards)}
-              onMouseOut={() => onHoverOut()}
-            >
-              <img
-                src={renderImage(id, sample_cards)}
-                alt={renderName(id, sample_cards)}
-                style={{ width: "70px", height: "100px" }}
-              />
-            </button>
-          )}
-        </div>
-      ))}
+      <div className="deck-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Card</th>
+              <th>Name</th>
+              <th>Qty</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(collateNum).map((id) => (
+              <tr key={`table-row-${id}`}>
+                <td>
+                  {sample_cards && (
+                    <button
+                      onMouseOver={() => onHover(id, sample_cards)}
+                      onMouseOut={() => onHoverOut()}
+                    >
+                      <img
+                        src={renderImage(id, sample_cards)}
+                        alt={renderName(id, sample_cards)}
+                        style={{ width: "80px", height: "120px" }}
+                      />
+                    </button>
+                  )}
+                </td>
+                <td>{renderName(id, sample_cards)}</td>
+                <td>{collateNum[id]}</td>
+                <td>{remarks(id, sample_cards)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -60,7 +60,47 @@
   display: inline-block;
   margin: 0px;
 }
-.main-display{
+.trig-count{
   display: inline-block;
-  margin: 0px;
+  
+}.trig-count div {
+  font-weight: bold;
+  font-size: 32px; /* Adjust the size as needed */
+  margin-right: 10px; /* Adjust the spacing between elements */
+}
+#crit{
+  color: rgb(180, 178, 33);
+}
+#front{
+  color: rgb(141, 4, 118);
+}
+#draw{
+  color: rgb(143, 6, 6);
+}
+#heal{
+  color: rgb(54, 161, 22);
+}
+#over{
+  color: rgb(73, 73, 69);
+}
+
+.deck-table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(194, 241, 241);
+  width: 80%;
+  
+}
+
+.deck-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.deck-table th,
+.deck-table td {
+  border: 1px solid #2e2d2d; /* Border color */
+  padding: 8px;
+  text-align: left;
 }

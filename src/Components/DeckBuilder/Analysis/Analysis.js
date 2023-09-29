@@ -36,12 +36,17 @@ export default function Analysis() {
     const intId = parseInt(cardId, 10);
     for (const card in sample_cards) {
       if (sample_cards[card].id === intId && sample_cards[card].Trigger) {
-        return true;
+        return sample_cards[card].Trigger;
       }
     }
     return false;
   };
-
+const setCard=(cardId)=>{const intId = parseInt(cardId, 10);
+  for (const card in sample_cards) {
+    if (sample_cards[card].id === intId){
+      return[sample_cards[card].isSentinel,sample_cards[card].CardAdvantage ]
+    }
+  }}
   useEffect(() => {
     for (const id in listOfDecks) {
       if (listOfDecks[id].name === name) {
@@ -53,14 +58,20 @@ export default function Analysis() {
         for (const cid in listOfDecks[id].deckList) {
           const cardId = listOfDecks[id].deckList[cid];
           if (isTrigger(cardId)) {
-            triggerList.push(cardId);
+            triggerList.push({id: cardId, type:isTrigger(cardId)}); //separate triggers from other cards
           } else {
-            deckList.push(cardId);
+            deckList.push({id:cardId, isSentinel:setCard(cardId)[0], CA: setCard(cardId)[1]});
           }
         }
-        for (const card in rideDeck) {
-          const index = deckList.indexOf(rideDeck[card]);
-          deckList.splice(index, 1);
+        for (const card in rideDeck) { //remove ride deck cards from main deck
+          for(const dId in deckList){
+            if (rideDeck[card]===deckList[dId].id){
+              deckList.splice(dId, 1);
+              break;
+            }
+          }
+          
+          
         }
         setTriggers(triggerList);
         setMainDeck(deckList);

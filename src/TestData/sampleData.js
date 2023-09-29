@@ -64,18 +64,118 @@ export const sample_cards = {
     Effect: null,
     CardAdvantage: 0,
   },
+  card5: {
+    id: 4,
+    CardNumber: "DSD02-002",
+    CardName: `Diabolos, "Anger" Richard`,
+    Image:
+      "https://static.wikia.nocookie.net/cardfight/images/b/b6/D-SD02-002_(Sample).png",
+    Nation: "Dark Sates",
+    CardType: "unit",
+    Grade: 2,
+    Power: 10000,
+    Shield: 5000,
+    Trigger: null,
+    isSentinel: false,
+    Effect: `[AUTO]:When this unit is placed on (VC), COST [put a rear-guard into your soul], and draw a card.\n
+    [CONT](RC):If you are in "Final Rush", this unit gets [Power]+5000.`,
+    CardAdvantage: 0,
+  },
+  card6: {
+    id: 5,
+    CardNumber: "DSD03-012",
+    CardName: "Knight of Heavenly Pierce, Gallus",
+    Image:
+      "https://static.wikia.nocookie.net/cardfight/images/6/68/D-SD03-012_(Sample).png",
+    Nation: "Keter Sanctuary",
+    CardType: "unit",
+    Grade: 0,
+    Power: 5000,
+    Shield: 5000,
+    Trigger: "Draw",
+    isSentinel: false,
+    Effect: null,
+    CardAdvantage: 1,
+  },
+  card7: {
+    id: 6,
+    CardNumber: "DSD04-015",
+    CardName: "Call to the Beasts",
+    Image:
+      "https://static.wikia.nocookie.net/cardfight/images/a/a0/D-SD04-015_(Sample).png",
+    Nation: "Stoicheia",
+    CardType: "blitz order",
+    Grade: 2,
+    Power: null,
+    Shield: null,
+    Trigger: null,
+    isSentinel: false,
+    Effect:
+      "Choose one of your units, and it gets [Power]+5000 until end of that battle. If you have three or more back row rear-guards, it gets +15000 instead of +5000.",
+    CardAdvantage: -1,
+  },
+  card8: {
+    id: 7,
+    CardNumber: "DPR-264",
+    CardName: "Elementaria Sanctitude",
+    Image:
+      "https://static.wikia.nocookie.net/cardfight/images/f/fb/D-PR-264_(Sample).png",
+    Nation: "Stoicheia",
+    CardType: "blitz order",
+    Grade: 1,
+    Power: null,
+    Shield: null,
+    Trigger: null,
+    isSentinel: true,
+    Effect:
+      `[CONT]:You may only have one "Elementaria Sanctitude" in a deck.
+
+      If your opponent's vanguard has "Triple Drive", this ability can be played without paying the cost.
+      Play this with COST [discard a card from hand] if your vanguard is grade 3 or less!
+      Choose one of your units, and it cannot be hit until end of that battle. Remove this card. `,
+    CardAdvantage: -2,
+  },
 };
 
 export const listOfDecks = {
   0: {
-    id:0,
+    id: 0,
     name: "example 1",
     deckList: ["1", "1", "1", "1", "2", "3", "3"],
     rideDeckList: ["1"],
-  },1: {
-    id:1,
+  },
+  1: {
+    id: 1,
     name: "test2",
     deckList: ["1", "1", "1", "1", "2", "2", "2", "2", "3"],
-    rideDeckList: ["1","2","3"],
-  }
+    rideDeckList: ["1", "2", "3"],
+  },
+  2: {
+    id: 2,
+    name: "my deck",
+    deckList: [
+      "1",
+      "1",
+      "1",
+      "1",
+      "2",
+      "2",
+      "7",
+      "2",
+      "3",
+      "3",
+      "3",
+      "3",
+      "4",
+      "5",
+      "5",
+      "5",
+      "5",
+      "6",
+      "6",
+      "6",
+      "6",
+    ],
+    rideDeckList: ["1", "4"],
+  },
 };
