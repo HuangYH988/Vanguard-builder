@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { sample_cards } from "../../TestData/sampleData";
+//import { sample_cards } from "../../TestData/sampleData";
 import Filter from "./Filter";
 
 import "./cards.css";
+
+const URL = process.env.REACT_APP_BACKEND_URL;
+export const url_cards = `${URL}/card`;
 
 export default function DeckBuild() {
   const [hoveredImage, setHoveredImage] = useState(null);
@@ -12,16 +15,51 @@ export default function DeckBuild() {
   const [trigger, setTrigger] = useState(null);
   const [cardName, setCardName] = useState("");
   const [isFilter, setIsFilter] = useState(false);
+  const [filteredCardpool, setFilteredCardpool] = useState("");
+  const [originalCardpool, setOriginalCardpool] = useState("");
+  const [cardSet, setCardSet] = useState(null);
 
   const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each button's state
   const [numOfCards, setNumOfCards] = useState({});
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url_cards, {
+          method: "GET",
+        });
+  
+        const data = await response.json();
+        setOriginalCardpool(data);
+      } catch (error) {
+        console.error("Error: ", error.message);
+      }
+    };
+  
+    // Fetch data only when cardSet or originalCardpool changes
+    if (cardSet !== null || !originalCardpool) {
+      fetchData();
+    }
+  
+    // Filter cards based on the selected set
+    if (originalCardpool) {
+      const filteredCards = cardSet
+    ? originalCardpool.filter((card) =>
+        card.card_number.includes(cardSet)
+      )
+    : originalCardpool;
+  
+      // Update the state with the filtered cards
+      setFilteredCardpool(filteredCards);
+    }
+  }, [cardSet, originalCardpool]);
+
   const onHover = (card) => {
-    setHoveredImage(card.Image);
-    setHoveredEffect(card.Effect);
-    setSentinel(card.isSentinel);
-    setTrigger(card.Trigger);
-    setCardName(card.CardName);
+    setHoveredImage(card.image_link);
+    setHoveredEffect(card.effect);
+    setSentinel(card.is_sentinel);
+    setTrigger(card.trigger);
+    setCardName(card.card_name);
   };
 
   const onHoverOut = () => {
@@ -76,12 +114,17 @@ export default function DeckBuild() {
       }));
     }
   };
+
   const openModal = () => {
     setIsFilter(true);
   };
-  const closeModal = () => {
+
+  const closeModal = (selectedSet) => {
     setIsFilter(false);
+
+    setCardSet(selectedSet); // Update cardSet state
   };
+
   const saveDeck = () => {
     const deckList = [];
     const rideDeckList = [];
@@ -105,7 +148,13 @@ export default function DeckBuild() {
       <button onClick={openModal}>Filter</button>
       <br />
 
-      <Filter isOpen={isFilter} onClose={closeModal} />
+      <Filter
+        isOpen={isFilter}
+        onClose={(set) => closeModal(set)}
+        onFilterSelect={(set) => {
+          setCardSet(set);
+        }}
+      /> 
 
       {hoveredImage && (
         <div className="preview-image">
@@ -120,7 +169,8 @@ export default function DeckBuild() {
           )}
         </div>
       )}
-      {Object.values(sample_cards).map((card, index) => (
+      
+      {Object.values(filteredCardpool).map((card, index) => (
         <button
           className="card-img"
           key={index}
@@ -129,7 +179,7 @@ export default function DeckBuild() {
           onClick={(event) => onClick(event, card.id)}
           onContextMenu={(event) => onRightClick(event, card.id)}
         >
-          <img src={card.Image} alt="card" />
+          <img src={card.image_link} alt="card" />
           {showRideDeck[card.id] && <div className="ride-deck">Ride deck</div>}
           {numOfCards[card.id] && numOfCards[card.id] !== 0 && (
             <div className="num-in-deck">{numOfCards[card.id]}</div>

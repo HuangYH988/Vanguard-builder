@@ -6,18 +6,18 @@ import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
 
 export const renderImage = (id, datas) => {
-  const intId = parseInt(id, 10);
+  
   for (const card in datas) {
-    if (datas[card].id === intId) {
-      return datas[card].Image;
+    if (datas[card].id === id) {
+      return datas[card].image_link;
     }
   }
 };
 export const renderName = (id, datas) => {
-  const intId = parseInt(id, 10);
+  
   for (const card in datas) {
-    if (datas[card].id === intId) {
-      return datas[card].CardName;
+    if (datas[card].id === id) {
+      return datas[card].card_name;
     }
   }
 };
