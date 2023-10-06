@@ -1,9 +1,9 @@
-import { sample_cards } from "../../../TestData/sampleData";
+//import { sample_cards } from "../../../TestData/sampleData";
 import { renderImage, renderName } from "./Analysis";
 import { useState } from "react";
 
 export default function RideDeck(prop) {
-  const { rideDeck } = prop;
+  const { rideDeck, cardpool } = prop;
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
@@ -11,14 +11,13 @@ export default function RideDeck(prop) {
   const [cardName, setCardName] = useState("");
 
   const onHover = (id, data) => {
-    const intId = parseInt(id, 10);
     for (const card in data) {
-      if (data[card].id === intId) {
-        setHoveredImage(data[card].Image);
-        setHoveredEffect(data[card].Effect);
-        setSentinel(data[card].isSentinel);
-        setTrigger(data[card].Trigger);
-        setCardName(data[card].CardName);
+      const cardID = parseInt(data[card].id, 10);
+      if (cardID === id) {
+        setHoveredImage(data[card].image_link);
+        setHoveredEffect(data[card].effect);
+        setSentinel(data[card].is_sentinel);
+        setCardName(data[card].card_name);
         break;
       }
     }
@@ -49,14 +48,14 @@ export default function RideDeck(prop) {
       )}
       {rideDeck.map((id) => (
         <div key={id} className="ride-display">
-          {sample_cards && (
+          {cardpool && (
             <button
-              onMouseOver={() => onHover(id, sample_cards)}
+              onMouseOver={() => onHover(id, cardpool)}
               onMouseOut={() => onHoverOut()}
             >
               <img
-                src={renderImage(id, sample_cards)}
-                alt={renderName(id, sample_cards)}
+                src={renderImage(id, cardpool)}
+                alt={renderName(id, cardpool)}
                 style={{ width: "90px", height: "120px" }}
               />
             </button>

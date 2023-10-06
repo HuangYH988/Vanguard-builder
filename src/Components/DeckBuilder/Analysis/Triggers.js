@@ -1,9 +1,9 @@
-import { sample_cards } from "../../../TestData/sampleData";
+//import { sample_cards } from "../../../TestData/sampleData";
 import { renderImage, renderName } from "./Analysis";
 import { useState, useEffect } from "react";
 
 export default function Triggers(prop) {
-  const { triggers } = prop;
+  const { triggers, cardpool } = prop;
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
   const [sentinel, setSentinel] = useState(null);
@@ -27,13 +27,13 @@ export default function Triggers(prop) {
     };
 
     for (const card of triggers) {
-      if (card.type === "Crit") {
+      if (card.type === "Crit ") {
         newTypeCount.Crit += 1;
-      } else if (card.type === "Draw") {
+      } else if (card.type === "Draw ") {
         newTypeCount.Draw += 1;
-      } else if (card.type === "Front") {
+      } else if (card.type === "Front ") {
         newTypeCount.Front += 1;
-      } else if (card.type === "Heal") {
+      } else if (card.type === "Heal ") {
         newTypeCount.Heal += 1;
       } else if (card.type === "Over") {
         newTypeCount.Over += 1;
@@ -49,12 +49,12 @@ export default function Triggers(prop) {
   const onHover = (id, data) => {
     const intId = parseInt(id, 10);
     for (const card in data) {
-      if (data[card].id === intId) {
-        setHoveredImage(data[card].Image);
-        setHoveredEffect(data[card].Effect);
-        setSentinel(data[card].isSentinel);
-        setTrigger(data[card].Trigger);
-        setCardName(data[card].CardName);
+      const cardID = parseInt(data[card].id, 10);
+      if (cardID === intId) {
+        setHoveredImage(data[card].image_link);
+        setHoveredEffect(data[card].effect);
+        setSentinel(data[card].is_sentinel);
+        setCardName(data[card].card_name);
         break;
       }
     }
@@ -84,14 +84,14 @@ export default function Triggers(prop) {
       )}
       {triggers.map((card, index) => (
         <div key={"trigger" + index} className="trigger-display">
-          {sample_cards && (
+          {cardpool && (
             <button
-              onMouseOver={() => onHover(card.id, sample_cards)}
+              onMouseOver={() => onHover(card.id, cardpool)}
               onMouseOut={() => onHoverOut()}
             >
               <img
-                src={renderImage(card.id, sample_cards)}
-                alt={renderName(card.id, sample_cards)}
+                src={renderImage(card.id, cardpool)}
+                alt={renderName(card.id, cardpool)}
                 style={{ width: "70px", height: "100px" }}
               />
             </button>

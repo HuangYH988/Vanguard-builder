@@ -127,8 +127,7 @@ export const sample_cards = {
     Shield: null,
     Trigger: null,
     isSentinel: true,
-    Effect:
-      `[CONT]:You may only have one "Elementaria Sanctitude" in a deck.
+    Effect: `[CONT]:You may only have one "Elementaria Sanctitude" in a deck.
 
       If your opponent's vanguard has "Triple Drive", this ability can be played without paying the cost.
       Play this with COST [discard a card from hand] if your vanguard is grade 3 or less!
@@ -141,31 +140,31 @@ export const listOfDecks = {
   0: {
     id: 0,
     name: "example 1",
-    deckList: ["1", "1", "1", "1", "2", "3", "3"],
-    rideDeckList: ["1"],
+    deckList: ["13", "14", "15", "16", "2", "4", "4"],
+    rideDeckList: ["2"],
   },
   1: {
     id: 1,
     name: "test2",
-    deckList: ["1", "1", "1", "1", "2", "2", "2", "2", "3"],
-    rideDeckList: ["1", "2", "3"],
+    deckList: ["12", "14", "13", "13", "2", "2", "2", "2", "4"],
+    rideDeckList: ["5", "2", "4"],
   },
   2: {
     id: 2,
     name: "my deck",
     deckList: [
-      "1",
-      "1",
-      "1",
-      "1",
+      "14",
+      "14",
+      "14",
+      "14",
       "2",
+      "2",
+      "16",
       "2",
       "7",
-      "2",
-      "3",
-      "3",
-      "3",
-      "3",
+      "7",
+      "7",
+      "7",
       "4",
       "5",
       "5",
@@ -176,6 +175,6 @@ export const listOfDecks = {
       "6",
       "6",
     ],
-    rideDeckList: ["1", "4"],
+    rideDeckList: ["2", "4"],
   },
 };

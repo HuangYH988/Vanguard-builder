@@ -1,32 +1,15 @@
-import { url_cards } from "../DeckBuilder";
 import { renderImage, renderName } from "./Analysis";
 import { useState, useEffect } from "react";
 
 export default function MainDeck(prop) {
-  const { mainDeck } = prop;
+  const { mainDeck, cardpool } = prop;
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
-  const [originalCardpool, setOriginalCardpool] = useState(null);
   const [sentinel, setSentinel] = useState(null);
   const [cardName, setCardName] = useState("");
   const [collateNum, setCollateNum] = useState({});
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url_cards, {
-          method: "GET",
-        });
-  
-        const data = await response.json();
-        setOriginalCardpool(data);
-      } catch (error) {
-        console.error("Error: ", error.message);
-      }
-    };
-    if (originalCardpool===null) {
-      fetchData();
-    }
     const newCollateNum = mainDeck.reduce((acc, card) => {
       const { id } = card;
       acc[id] = (acc[id] || 0) + 1;
@@ -34,10 +17,9 @@ export default function MainDeck(prop) {
     }, {});
 
     setCollateNum(newCollateNum);
-  }, [mainDeck, originalCardpool]);
+  }, [mainDeck]);
 
   const remarks = (id, data) => {
-    
     const output = [];
     for (const card in data) {
       if (data[card].id === id) {
@@ -54,11 +36,8 @@ export default function MainDeck(prop) {
   const onHover = (id, data) => {
     const intId = parseInt(id, 10);
     for (const card in data) {
-      
-      
       const cardID = parseInt(data[card].id, 10);
       if (cardID === intId) {
-        
         setHoveredImage(data[card].image_link);
         setHoveredEffect(data[card].effect);
         setSentinel(data[card].is_sentinel);
@@ -98,28 +77,27 @@ export default function MainDeck(prop) {
               <th>Remarks</th>
             </tr>
           </thead>
-          {console.log(originalCardpool)}
+
           <tbody>
             {Object.keys(collateNum).map((id) => (
               <tr key={`table-row-${id}`}>
                 <td>
-                  {originalCardpool && (
+                  {cardpool && (
                     <button
-                      onMouseOver={() => onHover(id, originalCardpool)}
+                      onMouseOver={() => onHover(id, cardpool)}
                       onMouseOut={() => onHoverOut()}
                     >
-                      
                       <img
-                        src={renderImage(id, originalCardpool)}
-                        alt={renderName(id, originalCardpool)}
+                        src={renderImage(id, cardpool)}
+                        alt={renderName(id, cardpool)}
                         style={{ width: "80px", height: "120px" }}
                       />
                     </button>
                   )}
                 </td>
-                <td>{renderName(id, originalCardpool)}</td>
+                <td>{renderName(id, cardpool)}</td>
                 <td>{collateNum[id]}</td>
-                <td>{remarks(id, originalCardpool)}</td>
+                <td>{remarks(id, cardpool)}</td>
               </tr>
             ))}
           </tbody>
