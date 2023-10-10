@@ -36,7 +36,7 @@ export default function RideDeck(prop) {
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
-          {cardName}
+          <p>{cardName}</p>
           {trigger ? <div>{trigger} trigger</div> : null}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (

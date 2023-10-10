@@ -58,7 +58,7 @@ export default function MainDeck(prop) {
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
-          {cardName}
+          <p>{cardName}</p>
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
             <p>{hoveredEffect}</p>

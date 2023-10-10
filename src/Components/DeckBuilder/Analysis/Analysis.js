@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { listOfDecks } from "../../../TestData/sampleData";
+//import { listOfDecks } from "../../../TestData/sampleData";
 import { url_cards } from "../DeckBuilder";
 import RideDeck from "./RideDeck";
 import MainDeck from "./MainDeck";
@@ -20,6 +20,10 @@ export const renderName = (id, datas) => {
     }
   }
 };
+
+const URL = process.env.REACT_APP_BACKEND_URL;
+const url_deck = `${URL}/deck/byPlayer`;
+const player_id = 2; // TODO: replace this value by the logged in player ID once auth0 is set-up
 
 export default function Analysis() {
   const [deck, setDeck] = useState();
@@ -60,59 +64,64 @@ export default function Analysis() {
         console.error("Error: ", error.message);
       }
     };
+    const fetchData2 = async () => {
+      //const requestData={deck_name:name};
+      try {
+        const response = await fetch(`${url_deck}/${player_id}`, {
+          method: "GET",
+        });
+
+        const data = await response.json();
+        for (const dl in data) {
+          if (data[dl].deck_name === name) {
+            setDeck(data[dl]);
+            break;
+          }
+        }
+      } catch (error) {
+        console.error("Error: ", error.message);
+      }
+    };
+    fetchData2();
     if (originalCardpool === null) {
       fetchData();
     }
-    if (originalCardpool) {
-      for (const id in listOfDecks) {
-        if (listOfDecks[id].name === name) {
-          //find the corresponding deck within deck-list
-          setDeck(listOfDecks[id]);
-          setRideDeck(listOfDecks[id].rideDeckList);
-          const triggerList = [];
-          const deckList = [];
-          for (const cid in listOfDecks[id].deckList) {
-            const cardId = listOfDecks[id].deckList[cid];
-            if (isTrigger(cardId, originalCardpool)) {
-              triggerList.push({
-                id: cardId,
-                type: isTrigger(cardId, originalCardpool),
-              }); //separate triggers from other cards
-            } else {
-              deckList.push({
-                id: cardId,
-                isSentinel: setCard(cardId, originalCardpool)[0],
-                CA: setCard(cardId, originalCardpool)[1],
-              });
-            }
-          }
-          for (const card in rideDeck) {
-            //remove ride deck cards from main deck
-            for (const dId in deckList) {
-              if (rideDeck[card] === deckList[dId].id) {
-                deckList.splice(dId, 1);
-                break;
-              }
-            }
-          }
-          setTriggers(triggerList);
-          setMainDeck(deckList);
-          break; // assuming names are unique, no need to continue searching
-        }
+    if (originalCardpool && deck) {
+      setRideDeck(deck.ride_deck);
+      const triggerList = [];
+      const deckList = [];
+      for (const tid in deck.triggers) {
+        const trigId = deck.triggers[tid];
+
+        triggerList.push({
+          id: trigId,
+          type: isTrigger(trigId, originalCardpool),
+        });
       }
+      for (const mid in deck.main_deck) {
+        const cardId = deck.main_deck[mid];
+        deckList.push({
+          id: cardId,
+          isSentinel: setCard(cardId, originalCardpool)[0],
+          CA: setCard(cardId, originalCardpool)[1],
+        });
+      }
+
+      setTriggers(triggerList);
+      setMainDeck(deckList);
     }
-  }, [name, rideDeck, originalCardpool]);
+  }, [name, deck, rideDeck, originalCardpool]);
 
   return (
     <div>
-      <h1>Deck: {deck ? `${deck.name}` : null}</h1>
+      <h1>Deck: {deck ? `${deck.deck_name}` : null}</h1>
       <h3>Ride Deck:</h3>
       <RideDeck rideDeck={rideDeck} cardpool={originalCardpool} />
       <h3>Triggers:</h3>
       <Triggers triggers={triggers} cardpool={originalCardpool} />
       <h3>Main Deck:</h3>
       <MainDeck mainDeck={mainDeck} cardpool={originalCardpool} />
-      {console.log(originalCardpool)}
+
       <br />
       <button>Import deck</button>
       <button>
