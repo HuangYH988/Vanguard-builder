@@ -1,4 +1,3 @@
-//import { sample_cards } from "../../../TestData/sampleData";
 import { renderImage, renderName } from "./Analysis";
 import { useState, useEffect } from "react";
 
@@ -54,6 +53,7 @@ export default function Triggers(prop) {
         setHoveredImage(data[card].image_link);
         setHoveredEffect(data[card].effect);
         setSentinel(data[card].is_sentinel);
+        setTrigger(data[card].trigger);
         setCardName(data[card].card_name);
         break;
       }
@@ -73,7 +73,7 @@ export default function Triggers(prop) {
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
           <p>{cardName}</p>
-          {trigger ? <div>{trigger} trigger</div> : null}
+          {trigger ? <div>{trigger}Trigger</div> : null}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
             <p>{hoveredEffect}</p>
@@ -82,22 +82,24 @@ export default function Triggers(prop) {
           )}
         </div>
       )}
-      {triggers.map((card, index) => (
-        <div key={"trigger" + index} className="trigger-display">
-          {cardpool && (
-            <button
-              onMouseOver={() => onHover(card.id, cardpool)}
-              onMouseOut={() => onHoverOut()}
-            >
-              <img
-                src={renderImage(card.id, cardpool)}
-                alt={renderName(card.id, cardpool)}
-                style={{ width: "70px", height: "100px" }}
-              />
-            </button>
-          )}
-        </div>
-      ))}
+      <div className="trigger-display-container">
+        {triggers.map((card, index) => (
+          <div key={"trigger" + index} className="trigger-display">
+            {cardpool && (
+              <button
+                onMouseOver={() => onHover(card.id, cardpool)}
+                onMouseOut={() => onHoverOut()}
+              >
+                <img
+                  src={renderImage(card.id, cardpool)}
+                  alt={renderName(card.id, cardpool)}
+                  style={{ width: "70px", height: "100px" }}
+                />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
       <br />
       <div className="trig-count">
         <div className="trig-count" id="crit">

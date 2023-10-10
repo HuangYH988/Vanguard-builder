@@ -10,6 +10,7 @@ export default function MainDeck(prop) {
   const [collateNum, setCollateNum] = useState({});
 
   useEffect(() => {
+    // Group same cards together and collate their amount
     const newCollateNum = mainDeck.reduce((acc, card) => {
       const { id } = card;
       acc[id] = (acc[id] || 0) + 1;

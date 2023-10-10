@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-//import { listOfDecks } from "../../../TestData/sampleData";
 import { url_cards } from "../DeckBuilder";
 import RideDeck from "./RideDeck";
 import MainDeck from "./MainDeck";

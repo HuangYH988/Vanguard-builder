@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-//import { sample_cards } from "../../TestData/sampleData";
 import Filter from "./Filter";
 
 import "./cards.css";
@@ -28,27 +27,25 @@ export default function DeckBuild() {
         const response = await fetch(url_cards, {
           method: "GET",
         });
-  
+
         const data = await response.json();
         setOriginalCardpool(data);
       } catch (error) {
         console.error("Error: ", error.message);
       }
     };
-  
+
     // Fetch data only when cardSet or originalCardpool changes
     if (cardSet !== null || !originalCardpool) {
       fetchData();
     }
-  
+
     // Filter cards based on the selected set
     if (originalCardpool) {
       const filteredCards = cardSet
-    ? originalCardpool.filter((card) =>
-        card.card_number.includes(cardSet)
-      )
-    : originalCardpool;
-  
+        ? originalCardpool.filter((card) => card.card_number.includes(cardSet))
+        : originalCardpool;
+
       // Update the state with the filtered cards
       setFilteredCardpool(filteredCards);
     }
@@ -154,13 +151,13 @@ export default function DeckBuild() {
         onFilterSelect={(set) => {
           setCardSet(set);
         }}
-      /> 
+      />
 
       {hoveredImage && (
         <div className="preview-image">
           <img src={hoveredImage} alt="Selected Card" />
           <p>{cardName}</p>
-          {trigger ? <div>{trigger} trigger</div> : null}
+          {trigger ? <div>{trigger}Trigger</div> : null}
           {sentinel ? <div>Sentinel</div> : null}
           {hoveredEffect ? (
             <p>{hoveredEffect}</p>
@@ -169,24 +166,26 @@ export default function DeckBuild() {
           )}
         </div>
       )}
-      
-      {Object.values(filteredCardpool).map((card, index) => (
-        <button
-          className="card-img"
-          key={index}
-          onMouseOver={() => onHover(card)}
-          onMouseOut={() => onHoverOut()}
-          onClick={(event) => onClick(event, card.id)}
-          onContextMenu={(event) => onRightClick(event, card.id)}
-        >
-          <img src={card.image_link} alt="card" />
-          {showRideDeck[card.id] && <div className="ride-deck">Ride deck</div>}
-          {numOfCards[card.id] && numOfCards[card.id] !== 0 && (
-            <div className="num-in-deck">{numOfCards[card.id]}</div>
-          )}
-        </button>
-      ))}
-
+      <div className="cardlist-display">
+        {Object.values(filteredCardpool).map((card, index) => (
+          <button
+            className="card-img"
+            key={index}
+            onMouseOver={() => onHover(card)}
+            onMouseOut={() => onHoverOut()}
+            onClick={(event) => onClick(event, card.id)}
+            onContextMenu={(event) => onRightClick(event, card.id)}
+          >
+            <img src={card.image_link} alt="card" />
+            {showRideDeck[card.id] && (
+              <div className="ride-deck">Ride deck</div>
+            )}
+            {numOfCards[card.id] && numOfCards[card.id] !== 0 && (
+              <div className="num-in-deck">{numOfCards[card.id]}</div>
+            )}
+          </button>
+        ))}
+      </div>
       <br />
 
       <button onClick={() => saveDeck()}>

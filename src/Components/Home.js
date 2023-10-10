@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-//import { listOfDecks } from "../TestData/sampleData";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_decks = `${URL}/deck`;
@@ -29,7 +28,7 @@ export default function HomePage() {
     <div>
       <h1>This the Home Page</h1>
       <h3>List of your decks:</h3>
-      {console.log(deckList)}
+      
       {deckList && (
         <ul>
           {Object.values(deckList).map((deck) => (
