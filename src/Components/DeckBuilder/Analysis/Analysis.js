@@ -4,6 +4,7 @@ import { url_cards } from "../DeckBuilder";
 import RideDeck from "./RideDeck";
 import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
+import { player_id } from "../../Home";
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -22,7 +23,7 @@ export const renderName = (id, datas) => {
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_deck = `${URL}/deck/byPlayer`;
-const player_id = 2; // TODO: replace this value by the logged in player ID once auth0 is set-up
+
 
 export default function Analysis() {
   const [deck, setDeck] = useState();

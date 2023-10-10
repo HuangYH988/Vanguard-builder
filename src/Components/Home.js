@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_decks = `${URL}/deck`;
+export const player_id = 4; //TODO: replace with actual player id once auth0 is established
 
 export default function HomePage() {
   const [deckList, setDeckList] = useState(null);
@@ -14,7 +15,14 @@ export default function HomePage() {
         });
 
         const data = await response.json();
-        setDeckList(data);
+         // Filter decks based on player_id
+        const playerDecks = Object.values(data).filter(
+          (deck) => parseInt(deck.player_id,10) === player_id
+        );
+       
+        // Set the filtered decks to the state
+        setDeckList(playerDecks);
+        
       } catch (error) {
         console.error("Error: ", error.message);
       }
@@ -32,7 +40,7 @@ export default function HomePage() {
       {deckList && (
         <ul>
           {Object.values(deckList).map((deck) => (
-            <li>
+            <li key={deck.deck_name}>
               <button>
                 <Link to={`/analysis?deck=${deck.deck_name}`}>
                   {deck.deck_name}
