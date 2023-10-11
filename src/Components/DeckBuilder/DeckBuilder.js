@@ -30,6 +30,51 @@ export default function DeckBuild() {
   const [triggerList, setTriggerList] = useState([]);
   const [mainDeckList, setMainDeckList] = useState([]);
 
+  const isDeckLimit = () => {
+    let cnt = 0;
+    for (const grade in rideDeckState) {
+      if (rideDeckState[grade]) {
+        for (const card in originalCardpool) {
+          if (originalCardpool[card].id === rideDeckState[grade]) {
+            if (originalCardpool[card].trigger === null) {
+              cnt += 1;
+            }
+            break;
+          }
+        }
+      }
+    }
+    const length = mainDeckList.length + cnt;
+    if (length >= 34) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  // const isTrigLimit=(type)=>{
+  //   let cnt = 0;
+  //     for (const grade in rideDeckState) {
+  //       if (rideDeckState[grade]) {
+  //         for (const card in originalCardpool) {
+  //           if (originalCardpool[card].id === rideDeckState[grade]) {
+  //             if (originalCardpool[card].trigger !== null) {
+  //               cnt += 1;
+  //             }
+  //             break;
+  //           }
+  //         }
+  //       }
+  //     }
+  //     const length = triggerList.length + cnt;
+  //     if (length >= 16) {
+  //       return false;
+  //     }
+  // switch(type){
+  //   case "Heal ":
+  // }
+  // }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,72 +124,85 @@ export default function DeckBuild() {
   const onClick = (event, card) => {
     const id = card.id;
     const grade = parseInt(card.grade, 10);
+    const isUnit = card.card_type === "Unit";
     if (event.ctrlKey) {
-      switch (grade) {
-        case 0:
-          if (!rideDeckState.g0) {
-            setShowRideDeck((prevState) => ({
-              ...prevState,
-              [id]: true, // Set the state for this specific button to true
-            }));
-            setRideDeckState((prevState) => ({
-              ...prevState,
-              g0: card.id,
-            }));
-          }
-          break;
-        case 1:
-          if (!rideDeckState.g1) {
-            setShowRideDeck((prevState) => ({
-              ...prevState,
-              [id]: true, // Set the state for this specific button to true
-            }));
-            setRideDeckState((prevState) => ({
-              ...prevState,
-              g1: card.id,
-            }));
-          }
-          break;
-        case 2:
-          if (!rideDeckState.g2) {
-            setShowRideDeck((prevState) => ({
-              ...prevState,
-              [id]: true, // Set the state for this specific button to true
-            }));
-            setRideDeckState((prevState) => ({
-              ...prevState,
-              g2: card.id,
-            }));
-          }
-          break;
-        case 3:
-          if (!rideDeckState.g3) {
-            setShowRideDeck((prevState) => ({
-              ...prevState,
-              [id]: true, // Set the state for this specific button to true
-            }));
-            setRideDeckState((prevState) => ({
-              ...prevState,
-              g3: card.id,
-            }));
-          }
-          break;
-        default:
-          alert("Warning: Cannot set this card as your ride deck!");
-          break;
+      if (isUnit) {
+        // Set card as ride deck if it is unit and of g0-g3
+        switch (grade) {
+          case 0:
+            if (!rideDeckState.g0) {
+              // Only set as ride deck if ride deck does not already contain a g0
+              setShowRideDeck((prevState) => ({
+                ...prevState,
+                [id]: true, // Set the state for this specific button to true
+              }));
+              setRideDeckState((prevState) => ({
+                ...prevState,
+                g0: card.id,
+              }));
+            }
+            break;
+          case 1:
+            if (!rideDeckState.g1) {
+              setShowRideDeck((prevState) => ({
+                ...prevState,
+                [id]: true, // Set the state for this specific button to true
+              }));
+              setRideDeckState((prevState) => ({
+                ...prevState,
+                g1: card.id,
+              }));
+            }
+            break;
+          case 2:
+            if (!rideDeckState.g2) {
+              setShowRideDeck((prevState) => ({
+                ...prevState,
+                [id]: true, // Set the state for this specific button to true
+              }));
+              setRideDeckState((prevState) => ({
+                ...prevState,
+                g2: card.id,
+              }));
+            }
+            break;
+          case 3:
+            if (!rideDeckState.g3) {
+              setShowRideDeck((prevState) => ({
+                ...prevState,
+                [id]: true, // Set the state for this specific button to true
+              }));
+              setRideDeckState((prevState) => ({
+                ...prevState,
+                g3: card.id,
+              }));
+            }
+            break;
+          default:
+            alert("Warning: Cannot set this card as your ride deck!");
+            break;
+        }
       }
-      
     }
-    if (numOfCards[id]) {
-      setNumOfCards((prevState) => ({
-        ...prevState,
-        [id]: numOfCards[id] + 1,
-      }));
+    const isVacancy = isDeckLimit();
+    if (isVacancy) {
+      if (numOfCards[id] && numOfCards[id] < 4) {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: numOfCards[id] + 1,
+        }));
+        setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+      } else if (numOfCards[id]) {
+        alert("You cannot have more than 4 copy of the same card.");
+      } else {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: 1,
+        }));
+        setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+      }
     } else {
-      setNumOfCards((prevState) => ({
-        ...prevState,
-        [id]: 1,
-      }));
+      alert("You have exceeded the upper limit of your deck");
     }
   };
 
@@ -194,13 +252,38 @@ export default function DeckBuild() {
         ...prevState,
         [id]: false, // Set the state for this specific button to false
       }));
-      
     }
+    const indexToRemove = mainDeckList.indexOf(id);
     if (numOfCards[id] > 1) {
       setNumOfCards((prevState) => ({
         ...prevState,
         [id]: numOfCards[id] - 1,
       }));
+      if (indexToRemove !== -1) {
+        // Remove the element at the found index
+        setMainDeckList((prevMainDeckList) => {
+          const newList = [...prevMainDeckList];
+          newList.splice(indexToRemove, 1);
+          return newList;
+        });
+      }
+    } else if (numOfCards[id] === 1) {
+      setNumOfCards((prevState) => ({
+        ...prevState,
+        [id]: null,
+      }));
+      setShowRideDeck((prevState) => ({
+        ...prevState,
+        [id]: false,
+      }));
+      if (indexToRemove !== -1) {
+        // Remove the element at the found index
+        setMainDeckList((prevMainDeckList) => {
+          const newList = [...prevMainDeckList];
+          newList.splice(indexToRemove, 1);
+          return newList;
+        });
+      }
     } else {
       setNumOfCards((prevState) => ({
         ...prevState,
@@ -225,16 +308,24 @@ export default function DeckBuild() {
 
   const saveDeck = () => {
     const deckList2 = [];
-    const rideDeckList = [rideDeckState.g0,rideDeckState.g1,rideDeckState.g2,rideDeckState.g3];
-    
+    const rideDeckList = [
+      rideDeckState.g0,
+      rideDeckState.g1,
+      rideDeckState.g2,
+      rideDeckState.g3,
+    ];
+
     for (const id in numOfCards) {
       for (let i = 0; i < numOfCards[id]; i++) {
         deckList2.push(id);
       }
     }
-    const requestData = {player_id: player_id, main_deck: deckList2, ride_deck: rideDeckList}
+    const requestData = {
+      player_id: player_id,
+      main_deck: deckList2,
+      ride_deck: rideDeckList,
+    };
     console.log(requestData);
-    
   };
 
   return (
@@ -242,14 +333,15 @@ export default function DeckBuild() {
       <h1>This is the page for deck building</h1>
       <button onClick={openModal}>Filter</button>
       <br />
-
-      <Filter
-        isOpen={isFilter}
-        onClose={(set) => closeModal(set)}
-        onFilterSelect={(set) => {
-          setCardSet(set);
-        }}
-      />
+      <div className="modal">
+        <Filter
+          isOpen={isFilter}
+          onClose={(set) => closeModal(set)}
+          onFilterSelect={(set) => {
+            setCardSet(set);
+          }}
+        />
+      </div>
 
       {hoveredImage && (
         <div className="preview-image">
