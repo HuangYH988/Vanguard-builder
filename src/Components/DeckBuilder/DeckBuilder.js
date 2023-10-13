@@ -27,24 +27,17 @@ export default function DeckBuild() {
     g2: null,
     g3: null,
   });
-  const [triggerList, setTriggerList] = useState([]);
+  const [triggerList, setTriggerList] = useState({
+    crit: [],
+    draw: [],
+    front: [],
+    heal: [],
+    over: [],
+  });
   const [mainDeckList, setMainDeckList] = useState([]);
 
   const isDeckLimit = () => {
-    let cnt = 0;
-    for (const grade in rideDeckState) {
-      if (rideDeckState[grade]) {
-        for (const card in originalCardpool) {
-          if (originalCardpool[card].id === rideDeckState[grade]) {
-            if (originalCardpool[card].trigger === null) {
-              cnt += 1;
-            }
-            break;
-          }
-        }
-      }
-    }
-    const length = mainDeckList.length + cnt;
+    const length = mainDeckList.length;
     if (length >= 34) {
       return false;
     } else {
@@ -52,28 +45,162 @@ export default function DeckBuild() {
     }
   };
 
-  // const isTrigLimit=(type)=>{
-  //   let cnt = 0;
-  //     for (const grade in rideDeckState) {
-  //       if (rideDeckState[grade]) {
-  //         for (const card in originalCardpool) {
-  //           if (originalCardpool[card].id === rideDeckState[grade]) {
-  //             if (originalCardpool[card].trigger !== null) {
-  //               cnt += 1;
-  //             }
-  //             break;
-  //           }
-  //         }
-  //       }
-  //     }
-  //     const length = triggerList.length + cnt;
-  //     if (length >= 16) {
-  //       return false;
-  //     }
-  // switch(type){
-  //   case "Heal ":
-  // }
-  // }
+  const setDifferentTriggers = (id, type) => {
+    let length =
+      triggerList.crit.length +
+      triggerList.draw.length +
+      triggerList.heal.length +
+      triggerList.front.length +
+      triggerList.over.length;
+    if (length >= 16) {
+      alert("You can only have a maximum of 16 triggers in your deck.");
+      return;
+    }
+    switch (type) {
+      case "Crit ":
+        length = triggerList.crit.length;
+        if (length >= 8) {
+          alert(
+            "You have exceeded the maximum number of Critical triggers in deck."
+          );
+          break;
+        } else {
+          if (numOfCards[id] && numOfCards[id] >= 4) {
+            alert("You cannot have more than 4 copy of the same card.");
+            break;
+          } else if (numOfCards[id]) {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: numOfCards[id] + 1,
+            }));
+          } else {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: 1,
+            }));
+          }
+          const newList = triggerList.crit ? [...triggerList.crit, id] : [id];
+          setTriggerList({
+            ...triggerList,
+            crit: newList,
+          });
+          break;
+        }
+      case "Draw ":
+        length = triggerList.draw.length;
+        if (length >= 8) {
+          alert(
+            "You have exceeded the maximum number of Draw triggers in deck."
+          );
+          break;
+        } else {
+          if (numOfCards[id] && numOfCards[id] >= 4) {
+            alert("You cannot have more than 4 copy of the same card.");
+            break;
+          } else if (numOfCards[id]) {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: numOfCards[id] + 1,
+            }));
+          } else {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: 1,
+            }));
+          }
+          const newList = triggerList.draw ? [...triggerList.draw, id] : [id];
+          setTriggerList({
+            ...triggerList,
+            draw: newList,
+          });
+          break;
+        }
+      case "Front ":
+        length = triggerList.front.length;
+        if (length >= 8) {
+          alert(
+            "You have exceeded the maximum number of Front triggers in deck."
+          );
+          break;
+        } else {
+          if (numOfCards[id] && numOfCards[id] >= 4) {
+            alert("You cannot have more than 4 copy of the same card.");
+            break;
+          } else if (numOfCards[id]) {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: numOfCards[id] + 1,
+            }));
+          } else {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: 1,
+            }));
+          }
+          const newList = triggerList.front ? [...triggerList.front, id] : [id];
+          setTriggerList({
+            ...triggerList,
+            front: newList,
+          });
+          break;
+        }
+      case "Heal ":
+        length = triggerList.heal.length;
+        if (length >= 4) {
+          alert(
+            "You have exceeded the maximum number of Heal triggers in deck."
+          );
+          break;
+        } else {
+          if (numOfCards[id] && numOfCards[id] >= 4) {
+            alert("You cannot have more than 4 copy of the same card.");
+            break;
+          } else if (numOfCards[id]) {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: numOfCards[id] + 1,
+            }));
+          } else {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: 1,
+            }));
+          }
+          const newList = triggerList.heal ? [...triggerList.heal, id] : [id];
+          setTriggerList({
+            ...triggerList,
+            heal: newList,
+          });
+          break;
+        }
+      case "Over":
+        length = triggerList.over.length;
+        if (length >= 1) {
+          alert("You can only have up to 1 overTrigger in your deck.");
+          break;
+        } else {
+          if (numOfCards[id]) {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: numOfCards[id] + 1,
+            }));
+          } else {
+            setNumOfCards((prevState) => ({
+              ...prevState,
+              [id]: 1,
+            }));
+          }
+          const newList = triggerList.over ? [...triggerList.over, id] : [id];
+          setTriggerList({
+            ...triggerList,
+            over: newList,
+          });
+          break;
+        }
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,6 +252,7 @@ export default function DeckBuild() {
     const id = card.id;
     const grade = parseInt(card.grade, 10);
     const isUnit = card.card_type === "Unit";
+    const isTrigger = card.trigger;
     if (event.ctrlKey) {
       if (isUnit) {
         // Set card as ride deck if it is unit and of g0-g3
@@ -185,31 +313,38 @@ export default function DeckBuild() {
       }
     }
     const isVacancy = isDeckLimit();
-    if (isVacancy) {
-      if (numOfCards[id] && numOfCards[id] < 4) {
-        setNumOfCards((prevState) => ({
-          ...prevState,
-          [id]: numOfCards[id] + 1,
-        }));
-        setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
-      } else if (numOfCards[id]) {
-        alert("You cannot have more than 4 copy of the same card.");
-      } else {
-        setNumOfCards((prevState) => ({
-          ...prevState,
-          [id]: 1,
-        }));
-        setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
-      }
+    if (isTrigger) {
+      setDifferentTriggers(id, isTrigger);
     } else {
-      alert("You have exceeded the upper limit of your deck");
+      if (isVacancy) {
+        if (numOfCards[id] && numOfCards[id] >= 4) {
+          alert("You cannot have more than 4 copy of the same card.");
+        } else if (numOfCards[id]) {
+          setNumOfCards((prevState) => ({
+            ...prevState,
+            [id]: numOfCards[id] + 1,
+          }));
+          setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+        } else {
+          setNumOfCards((prevState) => ({
+            ...prevState,
+            [id]: 1,
+          }));
+          setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+        }
+      } else {
+        alert("You have exceeded the upper limit of your deck");
+      }
     }
+    console.log(triggerList);
+    //console.log(mainDeckList);
   };
 
   const onRightClick = (event, card) => {
     event.preventDefault();
     const id = card.id;
     const grade = parseInt(card.grade, 10);
+    const isTrigger = card.trigger;
     if (event.ctrlKey) {
       switch (grade) {
         case 0:
@@ -253,47 +388,127 @@ export default function DeckBuild() {
         [id]: false, // Set the state for this specific button to false
       }));
     }
-    const indexToRemove = mainDeckList.indexOf(id);
-    if (numOfCards[id] > 1) {
-      setNumOfCards((prevState) => ({
-        ...prevState,
-        [id]: numOfCards[id] - 1,
-      }));
-      if (indexToRemove !== -1) {
-        // Remove the element at the found index
-        setMainDeckList((prevMainDeckList) => {
-          const newList = [...prevMainDeckList];
-          newList.splice(indexToRemove, 1);
-          return newList;
-        });
+    let indexToRemove;
+    if (isTrigger) {
+      switch (isTrigger) {
+        case "Crit ":
+          indexToRemove = triggerList.crit.indexOf(id);
+          if (indexToRemove !== -1) {
+            const newList = [...triggerList.crit];
+            newList.splice(indexToRemove, 1);
+            setTriggerList({
+              ...triggerList,
+              crit: newList,
+            });
+          }
+          break;
+        case "Draw ":
+          indexToRemove = triggerList.draw.indexOf(id);
+          if (indexToRemove !== -1) {
+            const newList = [...triggerList.draw];
+            newList.splice(indexToRemove, 1);
+            setTriggerList({
+              ...triggerList,
+              draw: newList,
+            });
+          }
+          break;
+        case "Front ":
+          indexToRemove = triggerList.front.indexOf(id);
+          if (indexToRemove !== -1) {
+            const newList = [...triggerList.front];
+            newList.splice(indexToRemove, 1);
+            setTriggerList({
+              ...triggerList,
+              front: newList,
+            });
+          }
+          break;
+        case "Heal ":
+          indexToRemove = triggerList.heal.indexOf(id);
+          if (indexToRemove !== -1) {
+            const newList = [...triggerList.heal];
+            newList.splice(indexToRemove, 1);
+            setTriggerList({
+              ...triggerList,
+              heal: newList,
+            });
+          }
+          break;
+        case "Over":
+          indexToRemove = triggerList.over.indexOf(id);
+          if (indexToRemove !== -1) {
+            const newList = [...triggerList.over];
+            newList.splice(indexToRemove, 1);
+            setTriggerList({
+              ...triggerList,
+              over: newList,
+            });
+          }
+          break;
+        default:
+          break;
       }
-    } else if (numOfCards[id] === 1) {
-      setNumOfCards((prevState) => ({
-        ...prevState,
-        [id]: null,
-      }));
-      setShowRideDeck((prevState) => ({
-        ...prevState,
-        [id]: false,
-      }));
-      if (indexToRemove !== -1) {
-        // Remove the element at the found index
-        setMainDeckList((prevMainDeckList) => {
-          const newList = [...prevMainDeckList];
-          newList.splice(indexToRemove, 1);
-          return newList;
-        });
+      if (numOfCards[id] > 1) {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: numOfCards[id] - 1,
+        }));
+      } else {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: null,
+        }));
+        setShowRideDeck((prevState) => ({
+          ...prevState,
+          [id]: false,
+        }));
       }
     } else {
-      setNumOfCards((prevState) => ({
-        ...prevState,
-        [id]: null,
-      }));
-      setShowRideDeck((prevState) => ({
-        ...prevState,
-        [id]: false,
-      }));
+      indexToRemove = mainDeckList.indexOf(id);
+      if (numOfCards[id] > 1) {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: numOfCards[id] - 1,
+        }));
+        if (indexToRemove !== -1) {
+          // Remove the element at the found index
+          setMainDeckList((prevMainDeckList) => {
+            const newList = [...prevMainDeckList];
+            newList.splice(indexToRemove, 1);
+            return newList;
+          });
+        }
+      } else if (numOfCards[id] === 1) {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: null,
+        }));
+        setShowRideDeck((prevState) => ({
+          ...prevState,
+          [id]: false,
+        }));
+        if (indexToRemove !== -1) {
+          // Remove the element at the found index
+          setMainDeckList((prevMainDeckList) => {
+            const newList = [...prevMainDeckList];
+            newList.splice(indexToRemove, 1);
+            return newList;
+          });
+        }
+      } else {
+        setNumOfCards((prevState) => ({
+          ...prevState,
+          [id]: null,
+        }));
+        setShowRideDeck((prevState) => ({
+          ...prevState,
+          [id]: false,
+        }));
+      }
     }
+    console.log(triggerList);
+    //console.log(mainDeckList);
   };
 
   const openModal = () => {
@@ -314,7 +529,12 @@ export default function DeckBuild() {
       rideDeckState.g2,
       rideDeckState.g3,
     ];
-
+    const triggersList = [];
+    for (const type in triggerList) {
+      for (let i = 0; i < triggerList[type].length; i++) {
+        triggersList.push(triggerList[type][i]);
+      }
+    }
     for (const id in numOfCards) {
       for (let i = 0; i < numOfCards[id]; i++) {
         deckList2.push(id);
@@ -324,6 +544,7 @@ export default function DeckBuild() {
       player_id: player_id,
       main_deck: deckList2,
       ride_deck: rideDeckList,
+      triggers: triggersList,
     };
     console.log(requestData);
   };
