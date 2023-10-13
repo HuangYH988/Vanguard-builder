@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Filter from "./Filter";
+import SaveDeck from "./SaveDeck";
 import { player_id } from "../Home";
 import "./cards.css";
 
@@ -521,33 +522,7 @@ export default function DeckBuild() {
     setCardSet(selectedSet); // Update cardSet state
   };
 
-  const saveDeck = () => {
-    const deckList2 = [];
-    const rideDeckList = [
-      rideDeckState.g0,
-      rideDeckState.g1,
-      rideDeckState.g2,
-      rideDeckState.g3,
-    ];
-    const triggersList = [];
-    for (const type in triggerList) {
-      for (let i = 0; i < triggerList[type].length; i++) {
-        triggersList.push(triggerList[type][i]);
-      }
-    }
-    for (const id in numOfCards) {
-      for (let i = 0; i < numOfCards[id]; i++) {
-        deckList2.push(id);
-      }
-    }
-    const requestData = {
-      player_id: player_id,
-      main_deck: deckList2,
-      ride_deck: rideDeckList,
-      triggers: triggersList,
-    };
-    console.log(requestData);
-  };
+  
 
   return (
     <div>
@@ -599,9 +574,11 @@ export default function DeckBuild() {
       </div>
       <br />
 
-      <button onClick={() => saveDeck()}>
-        <Link to="/analysis">Save deck</Link>
-      </button>
+      <button onClick={openModal}>Save deck</button>
+      <br />
+      <div className="modal">
+        <SaveDeck rideDeck={rideDeckState} triggers={triggerList} mainDeck={numOfCards} playerID={player_id}/>
+      </div>
       <button>
         <Link to="/">Back to homepage</Link>
       </button>
