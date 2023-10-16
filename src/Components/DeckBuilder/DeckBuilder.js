@@ -15,6 +15,7 @@ export default function DeckBuild() {
   const [trigger, setTrigger] = useState(null);
   const [cardName, setCardName] = useState("");
   const [isFilter, setIsFilter] = useState(false);
+  const [isSave, setIsSave] = useState(false);
   const [filteredCardpool, setFilteredCardpool] = useState("");
   const [originalCardpool, setOriginalCardpool] = useState("");
   const [cardSet, setCardSet] = useState(null);
@@ -337,8 +338,7 @@ export default function DeckBuild() {
         alert("You have exceeded the upper limit of your deck");
       }
     }
-    console.log(triggerList);
-    //console.log(mainDeckList);
+    
   };
 
   const onRightClick = (event, card) => {
@@ -508,12 +508,17 @@ export default function DeckBuild() {
         }));
       }
     }
-    console.log(triggerList);
-    //console.log(mainDeckList);
+    
   };
 
   const openModal = () => {
     setIsFilter(true);
+  };
+  const openModal2 = () => {
+    setIsSave(true);
+  };
+  const closeModal2 = () => {
+    setIsSave(false);
   };
 
   const closeModal = (selectedSet) => {
@@ -521,8 +526,6 @@ export default function DeckBuild() {
 
     setCardSet(selectedSet); // Update cardSet state
   };
-
-  
 
   return (
     <div>
@@ -574,10 +577,17 @@ export default function DeckBuild() {
       </div>
       <br />
 
-      <button onClick={openModal}>Save deck</button>
+      <button onClick={openModal2}>Save deck</button>
       <br />
       <div className="modal">
-        <SaveDeck rideDeck={rideDeckState} triggers={triggerList} mainDeck={numOfCards} playerID={player_id}/>
+        <SaveDeck
+          isOpen={isSave}
+          onClose={() => closeModal2()}
+          rideDeck={rideDeckState}
+          triggers={triggerList}
+          mainDeck={mainDeckList}
+          playerID={player_id}
+        />
       </div>
       <button>
         <Link to="/">Back to homepage</Link>

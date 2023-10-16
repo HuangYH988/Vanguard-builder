@@ -11,7 +11,7 @@ body {
 body::before {
   content: "";
   background-image: url("./Components/Images/background_yuyu.jpeg");
-  opacity: 0.2; /* Adjust the opacity to make it lighter or darker */
+  opacity: 0.4; /* Adjust the opacity to make it lighter or darker */
   position: absolute;
   top: 0;
   left: 0;
