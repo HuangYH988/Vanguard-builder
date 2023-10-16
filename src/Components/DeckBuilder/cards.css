@@ -137,3 +137,13 @@
 .modal{
   z-index: 2;
 }
+
+.grade-nation-filter{
+  z-index: 1;
+  border:2px solid black;
+  background-color: rgba(213, 228, 228, 0.774);
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+  
+}

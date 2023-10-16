@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Filter from "./Filter";
+import Filter from "../Filter/Filter";
+import FilterButtons from "../Filter/FilterButtons";
 import SaveDeck from "./SaveDeck";
 import { player_id } from "../Home";
 import "./cards.css";
@@ -18,7 +19,12 @@ export default function DeckBuild() {
   const [isSave, setIsSave] = useState(false);
   const [filteredCardpool, setFilteredCardpool] = useState("");
   const [originalCardpool, setOriginalCardpool] = useState("");
-  const [cardSet, setCardSet] = useState(null);
+  const [filters, setFilters] = useState({
+    cardSet: null,
+    grade: "3",
+    nation: "Dragon Empire",
+    card_name: null,
+  });
 
   const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each button's state
   const [numOfCards, setNumOfCards] = useState({});
@@ -217,22 +223,35 @@ export default function DeckBuild() {
         console.error("Error: ", error.message);
       }
     };
+    const checkFilterNull = () => {
+      if (filters.cardSet !== null) {
+        return true;
+      }
+      if (filters.name !== null) {
+        return true;
+      }
+      return false;
+    };
 
-    // Fetch data only when cardSet or originalCardpool changes
-    if (cardSet !== null || !originalCardpool) {
+    // Fetch data only when filters or originalCardpool changes
+    const filterChange = checkFilterNull();
+    if (filterChange || !originalCardpool) {
       fetchData();
     }
 
     // Filter cards based on the selected set
     if (originalCardpool) {
-      const filteredCards = cardSet
-        ? originalCardpool.filter((card) => card.card_number.includes(cardSet))
-        : originalCardpool;
+      const filterByGradeNation = originalCardpool.filter((card)=>card.nation===filters.nation && card.grade===filters.grade)
+      const filteredCards = filters.cardSet
+        ? filterByGradeNation.filter((card) =>
+            card.card_number.includes(filters.cardSet)
+          )
+        : filterByGradeNation;
 
       // Update the state with the filtered cards
       setFilteredCardpool(filteredCards);
     }
-  }, [cardSet, originalCardpool]);
+  }, [filters, originalCardpool]);
 
   const onHover = (card) => {
     setHoveredImage(card.image_link);
@@ -338,7 +357,6 @@ export default function DeckBuild() {
         alert("You have exceeded the upper limit of your deck");
       }
     }
-    
   };
 
   const onRightClick = (event, card) => {
@@ -508,7 +526,6 @@ export default function DeckBuild() {
         }));
       }
     }
-    
   };
 
   const openModal = () => {
@@ -524,7 +541,7 @@ export default function DeckBuild() {
   const closeModal = (selectedSet) => {
     setIsFilter(false);
 
-    setCardSet(selectedSet); // Update cardSet state
+    setFilters({ ...filters, cardSet: selectedSet });
   };
 
   return (
@@ -536,8 +553,8 @@ export default function DeckBuild() {
         <Filter
           isOpen={isFilter}
           onClose={(set) => closeModal(set)}
-          onFilterSelect={(set) => {
-            setCardSet(set);
+          onFilterSelect={(set, name) => {
+            setFilters({ ...filters, cardSet: set, card_name: name });
           }}
         />
       </div>
@@ -589,6 +606,9 @@ export default function DeckBuild() {
           playerID={player_id}
         />
       </div>
+      <FilterButtons properties={filters} onSetProp={(grade, nation) => {
+            setFilters({ ...filters, grade: grade, nation: nation });
+          }}/>
       <button>
         <Link to="/">Back to homepage</Link>
       </button>

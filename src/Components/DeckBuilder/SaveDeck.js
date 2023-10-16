@@ -37,9 +37,9 @@ export default function SaveDeck(prop) {
     }
     return true;
   };
-  function saveDeck(e) {
+  async function saveDeck(e) {
     e.preventDefault();
-
+  
     // Trim the deckName and check if it's empty or contains only spaces
     const trimmedDeckName = deckName.trim();
     if (!trimmedDeckName) {
@@ -48,7 +48,7 @@ export default function SaveDeck(prop) {
     }
     if (!checkLegit()) {
       alert(
-        "Your deck is not legitimate. Please make appropraite changes to your deck first."
+        "Your deck is not legitimate. Please make appropriate changes to your deck first."
       );
     } else {
       const requestData = {
@@ -60,19 +60,31 @@ export default function SaveDeck(prop) {
       };
       console.log(requestData);
       try {
-        fetch(url, {
+        const response = await fetch(url, {
           method: "POST",
-          // headers: {
-          //   "Content-Type": "application/json",
-          //   Authorization: `Bearer ${accessToken}`,
-          // },
+          headers: {
+            "Content-Type": "application/json",
+            // Add Authorization header if needed
+            // "Authorization": `Bearer ${accessToken}`,
+          },
           body: JSON.stringify(requestData),
         });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error:", errorData);
+          alert(`Failed to save deck. Error: ${errorData.message}`);
+        } else {
+          // Handle successful response if needed
+          alert("Deck saved successfully!");
+        }
       } catch (error) {
-        console.error("Error: ", error.message);
+        console.error("Error:", error.message);
+        alert(`Failed to save deck. Error: ${error.message}`);
       }
     }
   }
+  
 
   const handleCloseModal = () => {
     onClose();

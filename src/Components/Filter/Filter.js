@@ -1,25 +1,31 @@
 import Modal from "react-modal";
-import { useState} from "react";
+import { useState } from "react";
 
 export default function Filter(props) {
   const { isOpen, onClose, onFilterSelect } = props;
   const [selectedSet, setSelectedSet] = useState("");
+  const [selectedSubSet, setSelectedSubSet] = useState("");
+  const [nameFilter, setNameFilter]= useState("");
 
   const handleSelectChange = (event) => {
     setSelectedSet(event.target.value);
     // Reset the second select when the first select changes
   };
 
+  const handleSubSetChange = (event) => {
+    setSelectedSubSet(event.target.value);
+  };
+
   const handleCloseModal = () => {
     onClose();
-    onFilterSelect(selectedSet); // Pass both selected values
+    onFilterSelect(selectedSubSet,nameFilter);
   };
 
   const handleResetFilter = () => {
     onClose();
     setSelectedSet("");
-
-    onFilterSelect(null); // Reset both selected values to null
+    setSelectedSubSet("");
+    onFilterSelect(null, null);
   };
 
   // Define the options for the second select based on the first select value
@@ -30,13 +36,22 @@ export default function Filter(props) {
         SD02: "D Start Deck 02: Danji Momoyama -Tyrant Tiger-",
         SD03: "D Start Deck 03: Tohya Ebata -Apex Ruler-",
         SD04: "D Start Deck 04: Megumi Okura -Sylvan King-",
+        SD05: "D Start Deck 05: Tomari Seto -Aurora Valkyrie-",
       },
       // Add more options for other sets as needed
+      "Booster Sets": {
+        BT01: "D Booster Set 01: Genesis of the Five Greats",
+        BT02: "D Booster Set 02: A Brush with the Legends",
+        BT03: "D Booster Set 03: Advance of Intertwined Stars",
+        BT04: "D Booster Set 04: Awakening of Chakrabarthi",
+        BT05: "D Booster Set 05: Triumphant Return of the Brave Heroes",
+      },
+      "Special sets:": {},
     }[selectedSet] || [];
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} >
-      <div style={{ display: "flex", justifyContent: "flex-end"}}>
+    <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
@@ -53,10 +68,14 @@ export default function Filter(props) {
         <option value="PR">Promos</option>
       </select>
 
-      {selectedSet === "Start/Trial Decks" && (
+      {selectedSet && (
         <div>
           <div>Select the sub-set:</div>
-          <select value={selectedSet} onChange={handleSelectChange}>
+          <select
+            value={selectedSubSet}
+            onChange={handleSubSetChange}
+            disabled={!subSetOptions || Object.keys(subSetOptions).length === 0}
+          >
             <option>Select sub-set:</option>
             {Object.entries(subSetOptions).map(([key, value], index) => (
               <option key={index} value={key}>
