@@ -1,22 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 
 export default function FilterButtons(prop) {
   const { properties, onSetProp } = prop;
   const [grade, setGrade] = useState(properties.grade);
   const [nation, setNation] = useState(properties.nation);
 
-  useEffect(() => {
-    onSetProp(grade, nation);
-  }, [grade, nation, onSetProp]);
-
   const onClickGrade = (e) => {
     const selectedGrade = e.target.value;
     setGrade(selectedGrade);
+    onSetProp(selectedGrade, nation);
   };
 
   const onClickNation = (e) => {
     const selectedNation = e.target.value;
     setNation(selectedNation);
+    onSetProp(grade, selectedNation);
   };
 
   return (
