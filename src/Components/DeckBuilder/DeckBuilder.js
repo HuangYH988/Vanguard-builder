@@ -606,9 +606,16 @@ export default function DeckBuild() {
           playerID={player_id}
         />
       </div>
-      <FilterButtons properties={filters} onSetProp={(grade, nation) => {
-            setFilters({ ...filters, grade: grade, nation: nation });
-          }}/>
+      <FilterButtons
+  properties={filters}
+  onSetProp={(newGrade, newNation) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      grade: newGrade,
+      nation: newNation,
+    }));
+  }}
+/>
       <button>
         <Link to="/">Back to homepage</Link>
       </button>
