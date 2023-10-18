@@ -24,7 +24,6 @@ export const renderName = (id, datas) => {
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_deck = `${URL}/deck/byPlayer`;
 
-
 export default function Analysis() {
   const [deck, setDeck] = useState();
   const [rideDeck, setRideDeck] = useState([]);
@@ -82,7 +81,10 @@ export default function Analysis() {
         console.error("Error: ", error.message);
       }
     };
-    fetchData2();
+    if (!deck) {
+      fetchData2();
+    }
+
     if (originalCardpool === null) {
       fetchData();
     }
@@ -114,23 +116,29 @@ export default function Analysis() {
 
   return (
     <div>
-      <h1>Deck: {deck ? `${deck.deck_name}` : null}</h1>
-      <h3>Ride Deck:</h3>
-      <RideDeck rideDeck={rideDeck} cardpool={originalCardpool} />
-      <h3>Triggers:</h3>
-      <Triggers triggers={triggers} cardpool={originalCardpool} />
-      <h3>Main Deck:</h3>
-      <MainDeck mainDeck={mainDeck} cardpool={originalCardpool} />
+      {deck && (
+        <div>
+          <h1>Deck: {deck ? `${deck.deck_name}` : null}</h1>
+          <h3>Ride Deck:</h3>
+          <RideDeck rideDeck={rideDeck} cardpool={originalCardpool} />
+          <h3>Triggers:</h3>
+          <Triggers triggers={triggers} cardpool={originalCardpool} />
+          <h3>Main Deck:</h3>
+          <MainDeck mainDeck={mainDeck} cardpool={originalCardpool} />
 
-      <br />
-      <button>Import deck</button>
-      <button>
-        <Link to="/deckbuilder">Go to deck edittor</Link>
-      </button>
-      <button>
-        {" "}
-        <Link to="/"> Back to homepage</Link>
-      </button>
+          <br />
+          <button>Export image</button>
+          <button>
+            <Link to={`/deckbuilder`}>
+              Go to deck edittor
+            </Link>
+          </button>
+          <button>
+            {" "}
+            <Link to="/"> Back to homepage</Link>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Filter from "../Filter/Filter";
 import FilterButtons from "../Filter/FilterButtons";
+import LoadDeck from "./LoadDeck";
 import SaveDeck from "./SaveDeck";
 import { player_id } from "../Home";
 import "./cards.css";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 export const url_cards = `${URL}/card`;
+
 
 export default function DeckBuild() {
   const [hoveredImage, setHoveredImage] = useState(null);
@@ -16,9 +18,12 @@ export default function DeckBuild() {
   const [trigger, setTrigger] = useState(null);
   const [cardName, setCardName] = useState("");
   const [isFilter, setIsFilter] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [filteredCardpool, setFilteredCardpool] = useState("");
   const [originalCardpool, setOriginalCardpool] = useState("");
+  //const [existingDeck, setExistingDeck] = useState(null);
+
   const [filters, setFilters] = useState({
     cardSet: null,
     grade: "3",
@@ -223,37 +228,27 @@ export default function DeckBuild() {
         console.error("Error: ", error.message);
       }
     };
-    // const checkFilterNull = () => {
-    //   if (filters.cardSet !== null) {
-    //     return true;
-    //   }
-    //   if (filters.name !== null) {
-    //     return true;
-    //   }
-    //   return false;
-    // };
 
-    // Fetch data only when filters or originalCardpool changes
-    //const filterChange = checkFilterNull();
     if (!originalCardpool) {
       fetchData();
     }
+    if(!filteredCardpool){
+      if (originalCardpool) {
+        const filterByGradeNation = originalCardpool.filter(
+          (card) =>
+            card.nation === filters.nation && card.grade === filters.grade
+        );
+        const filteredCards = filters.cardSet
+          ? filterByGradeNation.filter((card) =>
+              card.card_number.includes(filters.cardSet)
+            )
+          : filterByGradeNation;
 
-    // Filter cards based on the selected set
-    if (originalCardpool) {
-      const filterByGradeNation = originalCardpool.filter(
-        (card) => card.nation === filters.nation && card.grade === filters.grade
-      );
-      const filteredCards = filters.cardSet
-        ? filterByGradeNation.filter((card) =>
-            card.card_number.includes(filters.cardSet)
-          )
-        : filterByGradeNation;
-
-      // Update the state with the filtered cards
-      setFilteredCardpool(filteredCards);
-    }
-  }, [filters, originalCardpool]);
+        // Update the state with the filtered cards
+        setFilteredCardpool(filteredCards);
+      }}
+    
+  }, [originalCardpool, filteredCardpool, filters]);
 
   const onHover = (card) => {
     setHoveredImage(card.image_link);
@@ -468,9 +463,16 @@ export default function DeckBuild() {
     setIsFilter(true);
   };
   const openModal2 = () => {
-    setIsSave(true);
+    setIsLoad(true);
   };
   const closeModal2 = () => {
+    setIsLoad(false);
+  };
+
+  const openModal3 = () => {
+    setIsSave(true);
+  };
+  const closeModal3 = () => {
     setIsSave(false);
   };
 
@@ -529,13 +531,20 @@ export default function DeckBuild() {
         ))}
       </div>
       <br />
-
-      <button onClick={openModal2}>Save deck</button>
+      <button onClick={openModal2}>Load deck</button>
+      <div className="modal">
+        <LoadDeck
+          isOpen={isLoad}
+          onClose={() => closeModal2()}
+          playerID={player_id}
+        />
+        </div>
+      <button onClick={openModal3}>Save deck</button>
       <br />
       <div className="modal">
         <SaveDeck
           isOpen={isSave}
-          onClose={() => closeModal2()}
+          onClose={() => closeModal3()}
           rideDeck={rideDeckState}
           triggers={triggerList}
           mainDeck={mainDeckList}
