@@ -10,7 +10,6 @@ import "./cards.css";
 const URL = process.env.REACT_APP_BACKEND_URL;
 export const url_cards = `${URL}/card`;
 
-
 export default function DeckBuild() {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [hoveredEffect, setHoveredEffect] = useState(null);
@@ -232,23 +231,23 @@ export default function DeckBuild() {
     if (!originalCardpool) {
       fetchData();
     }
-    if(!filteredCardpool){
-      if (originalCardpool) {
-        const filterByGradeNation = originalCardpool.filter(
-          (card) =>
-            card.nation === filters.nation && card.grade === filters.grade
-        );
-        const filteredCards = filters.cardSet
-          ? filterByGradeNation.filter((card) =>
-              card.card_number.includes(filters.cardSet)
-            )
-          : filterByGradeNation;
 
-        // Update the state with the filtered cards
-        setFilteredCardpool(filteredCards);
-      }}
-    
-  }, [originalCardpool, filteredCardpool, filters]);
+    // Only update filteredCardpool when filters change
+    if (originalCardpool && filters) {
+      const filterByGradeNation = originalCardpool.filter(
+        (card) => card.nation === filters.nation && card.grade === filters.grade
+      );
+
+      const filteredCards = filters.cardSet
+        ? filterByGradeNation.filter((card) =>
+            card.card_number.includes(filters.cardSet)
+          )
+        : filterByGradeNation;
+
+      // Update the state with the filtered cards
+      setFilteredCardpool(filteredCards);
+    }
+  }, [originalCardpool, filters]);
 
   const onHover = (card) => {
     setHoveredImage(card.image_link);
@@ -538,7 +537,7 @@ export default function DeckBuild() {
           onClose={() => closeModal2()}
           playerID={player_id}
         />
-        </div>
+      </div>
       <button onClick={openModal3}>Save deck</button>
       <br />
       <div className="modal">
