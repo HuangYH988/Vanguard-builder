@@ -483,7 +483,7 @@ export default function DeckBuild() {
 
   return (
     <div>
-      <h1>This is the page for deck building</h1>
+      <h1>Deck loaded: #Insert deck name</h1>
       <button onClick={openModal}>Filter</button>
       <br />
       <div className="modal">

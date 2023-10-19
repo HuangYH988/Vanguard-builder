@@ -34,7 +34,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1>This the Home Page</h1>
+      <h1>Welcome to Vanguard Builder</h1>
       <h3>List of your decks:</h3>
       
       {deckList && (
