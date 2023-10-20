@@ -4,7 +4,6 @@ import Filter from "../Filter/Filter";
 import FilterButtons from "../Filter/FilterButtons";
 import LoadDeck from "./LoadDeck";
 import SaveDeck from "./SaveDeck";
-import { player_id } from "../Home";
 import NavBar from "../../NavBar";
 import "./cards.css";
 
@@ -537,7 +536,7 @@ export default function DeckBuild() {
         <LoadDeck
           isOpen={isLoad}
           onClose={() => closeModal2()}
-          playerID={player_id}
+          
         />
       </div>
       <button onClick={openModal3}>Save deck</button>
@@ -549,7 +548,7 @@ export default function DeckBuild() {
           rideDeck={rideDeckState}
           triggers={triggerList}
           mainDeck={mainDeckList}
-          playerID={player_id}
+          
         />
       </div>
       <FilterButtons

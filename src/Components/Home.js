@@ -4,8 +4,8 @@ import NavBar from "../NavBar";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
-const url_decks = `${URL}/deck`;
-export const player_id = 4; //TODO: replace with actual player id once auth0 is established
+const url_decks = `${URL}/deck/byPlayer`;
+
 
 export default function HomePage() {
   const [deckList, setDeckList] = useState(null);
@@ -15,18 +15,15 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url_decks, {
+        const response = await fetch(`${url_decks}/${playerId}`, {
           method: "GET",
         });
 
         const data = await response.json();
-        // Filter decks based on player_id
-        const playerDecks = Object.values(data).filter(
-          (deck) => parseInt(deck.player_id, 10) === player_id
-        );
+        
 
         // Set the filtered decks to the state
-        setDeckList(playerDecks);
+        setDeckList(data);
       } catch (error) {
         console.error("Error: ", error.message);
       }
@@ -50,12 +47,13 @@ export default function HomePage() {
         }
       }
     };
-    if (deckList === null) {
-      fetchData();
-    }
     if (!playerId && isAuthenticated){
       getID();
     }
+    if (deckList === null && playerId) {
+      fetchData();
+    }
+    
   });
 
   return (

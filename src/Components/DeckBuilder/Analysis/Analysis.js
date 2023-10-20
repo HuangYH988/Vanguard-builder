@@ -4,8 +4,7 @@ import { url_cards } from "../DeckBuilder";
 import RideDeck from "./RideDeck";
 import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
-import { player_id } from "../../Home";
-
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -24,6 +23,7 @@ export const renderName = (id, datas) => {
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_deck = `${URL}/deck/byPlayer`;
+const url_player=`${URL}/player`;
 
 export default function Analysis() {
   const [deck, setDeck] = useState();
@@ -31,6 +31,9 @@ export default function Analysis() {
   const [triggers, setTriggers] = useState([]);
   const [mainDeck, setMainDeck] = useState([]);
   const [originalCardpool, setOriginalCardpool] = useState(null);
+  const [player, setPlayer]= useState(null);
+
+  const{user}= useAuth0();
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -67,7 +70,7 @@ export default function Analysis() {
     const fetchData2 = async () => {
       //const requestData={deck_name:name};
       try {
-        const response = await fetch(`${url_deck}/${player_id}`, {
+        const response = await fetch(`${url_deck}/${player.id}`, {
           method: "GET",
         });
 
@@ -82,7 +85,28 @@ export default function Analysis() {
         console.error("Error: ", error.message);
       }
     };
-    if (!deck) {
+    const fetchPlayerData=async()=>{
+      try {
+        const response = await fetch(url_player, {
+          method: "GET",
+        });
+  
+        const data = await response.json();
+        for (const acc in data) {
+          if (user.nickname === data[acc].player_name) {
+            setPlayer(data[acc])
+            break;
+          }
+        }
+      } catch (error) {
+        console.error("Error: ", error.message);
+      }
+     
+    }
+    if(!player){
+      fetchPlayerData();
+    }
+    if (!deck && player) {
       fetchData2();
     }
 
@@ -113,7 +137,7 @@ export default function Analysis() {
       setTriggers(triggerList);
       setMainDeck(deckList);
     }
-  }, [name, deck, rideDeck, originalCardpool]);
+  }, [name, deck, rideDeck, originalCardpool, user, player]);
 
   return (
     <div>

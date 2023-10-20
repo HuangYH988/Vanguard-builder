@@ -1,12 +1,41 @@
 import Modal from "react-modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url = `${URL}/deck`;
+const url_player=`${URL}/player`;
 
 export default function SaveDeck(prop) {
-  const { isOpen, onClose, rideDeck, triggers, mainDeck, playerID } = prop;
+  const { isOpen, onClose, rideDeck, triggers, mainDeck } = prop;
   const [deckName, setDeckName] = useState("");
+const {user, isAuthenticated } = useAuth0();
+const [player, setPlayer] =useState(null);
+
+useEffect(()=>{
+  const fetchPlayerData=async()=>{
+    try {
+      const response = await fetch(url_player, {
+        method: "GET",
+      });
+
+      const data = await response.json();
+      for (const acc in data) {
+        if (user.nickname === data[acc].player_name) {
+          setPlayer(data[acc])
+          break;
+        }
+      }
+    } catch (error) {
+      console.error("Error: ", error.message);
+    }
+   
+  }
+  if(isAuthenticated && !player){
+    fetchPlayerData();
+  }
+})
+
   const deckList2 = [];
   const rideDeckList = [rideDeck.g0, rideDeck.g1, rideDeck.g2, rideDeck.g3];
   const triggersList = [];
@@ -39,6 +68,9 @@ export default function SaveDeck(prop) {
   };
   async function saveDeck(e) {
     e.preventDefault();
+    if(!isAuthenticated){
+      alert("You need to login first before you can save a deck list.")
+    }
   
     // Trim the deckName and check if it's empty or contains only spaces
     const trimmedDeckName = deckName.trim();
@@ -53,7 +85,7 @@ export default function SaveDeck(prop) {
     } else {
       const requestData = {
         deck_name: deckName,
-        player_id: playerID,
+        player_id: player.id,
         main_deck: deckList2,
         ride_deck: rideDeckList,
         triggers: triggersList,

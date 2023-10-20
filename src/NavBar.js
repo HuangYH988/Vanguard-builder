@@ -28,6 +28,7 @@ export default function NavBar() {
     }
     const checkNew = () => {
       for (const acc in userList) {
+        
         if (user.nickname === userList[acc].player_name) {
           return false;
         }
@@ -56,12 +57,16 @@ export default function NavBar() {
       }
     };
     if(isAuthenticated && !player){
-        if (checkNew){
+      const isNew = checkNew();
+        if (isNew){
             createPlayer();
+            
         } else {
+          
             for (const acc in userList) {
                 if (user.nickname === userList[acc].player_name) {
                   setPlayer(userList[acc])
+                  break;
                 }
               }
         }
@@ -70,7 +75,7 @@ export default function NavBar() {
 
   return (
     <AppBar position="static" style={{ backgroundColor: "#e1f4fa" }}>
-        {console.log(userList)}
+       
       <Toolbar style={{ justifyContent: "flex-start" }}>
         <Typography variant="body1" style={{ color: "#063846" }}>
           <Link to="/" style={{ textDecoration: "none" }}>
