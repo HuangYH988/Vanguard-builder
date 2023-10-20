@@ -58,7 +58,7 @@ export default function SaveDeck(prop) {
         ride_deck: rideDeckList,
         triggers: triggersList,
       };
-      console.log(requestData);
+      
       try {
         const response = await fetch(url, {
           method: "POST",

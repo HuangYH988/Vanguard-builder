@@ -6,6 +6,7 @@ import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
 import { player_id } from "../../Home";
 
+
 export const renderImage = (id, datas) => {
   for (const card in datas) {
     if (datas[card].id === id) {

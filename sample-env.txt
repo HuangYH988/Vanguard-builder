@@ -1,0 +1,6 @@
+REACT_APP_API_AUDIENCE="https://vanguard-builder/api"
+REACT_APP_AUTH0_DOMAIN=dev-3xmr2paxq2bxqrez.us.auth0.com
+REACT_APP_AUTH0_CLIENT_ID=3iAKQwTM3fGcMsKhZ2xhI9U3dI9o8K9w
+
+npm install @mui/material @emotion/react @emotion/styled
+npm i @auth0/auth0-react

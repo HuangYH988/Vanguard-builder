@@ -5,6 +5,7 @@ import FilterButtons from "../Filter/FilterButtons";
 import LoadDeck from "./LoadDeck";
 import SaveDeck from "./SaveDeck";
 import { player_id } from "../Home";
+import NavBar from "../../NavBar";
 import "./cards.css";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -483,6 +484,7 @@ export default function DeckBuild() {
 
   return (
     <div>
+      <NavBar/>
       <h1>Deck loaded: #Insert deck name</h1>
       <button onClick={openModal}>Filter</button>
       <br />

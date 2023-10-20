@@ -7,6 +7,7 @@ import HomePage from "./Components/Home";
 import Analysis from "./Components/DeckBuilder/Analysis/Analysis";
 import DeckBuild from "./Components/DeckBuilder/DeckBuilder";
 
+
 function App() {
   // Set the app element when the component mounts
   useEffect(() => {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/deckbuilder" element={<DeckBuild />} />
         <Route path="/*" element={<Error />} />
       </Routes>
+      
     </div>
   );
 }
