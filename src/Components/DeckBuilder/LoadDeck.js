@@ -24,7 +24,7 @@ let i =0;
         const data = await response.json();
         // Filter decks based on player_id
         const playerDecks = Object.values(data).filter(
-          (deck) => parseInt(deck.player_id, 10) === playerID
+          (deck) => deck.player_id === playerID
         );
 
         // Set the filtered decks to the state

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
+import { usePlayerContext } from "./PlayerContext";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_player = `${URL}/player`;
@@ -9,7 +10,7 @@ const url_player = `${URL}/player`;
 export default function NavBar() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
   const [userList, setUserList] = useState(null);
-  const [player, setPlayer] = useState(null);
+  const { player, setPlayer } = usePlayerContext();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +52,9 @@ export default function NavBar() {
           },
           body: JSON.stringify(requestData),
         });
-        setPlayer(response)
+        const newPlayer = await response.json();
+        setPlayer(newPlayer)
+        
       } catch (error) {
         console.error("Error:", error.message);
       }
@@ -71,7 +74,7 @@ export default function NavBar() {
               }
         }
     }
-  },[userList, isAuthenticated, player, user]);
+  },[userList, isAuthenticated, player,setPlayer, user]);
 
   return (
     <AppBar position="static" style={{ backgroundColor: "#e1f4fa" }}>

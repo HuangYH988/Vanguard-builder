@@ -5,7 +5,9 @@ import FilterButtons from "../Filter/FilterButtons";
 import LoadDeck from "./LoadDeck";
 import SaveDeck from "./SaveDeck";
 import NavBar from "../../NavBar";
+import { usePlayerContext} from "../../PlayerContext"
 import "./cards.css";
+
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 export const url_cards = `${URL}/card`;
@@ -21,6 +23,7 @@ export default function DeckBuild() {
   const [isSave, setIsSave] = useState(false);
   const [filteredCardpool, setFilteredCardpool] = useState("");
   const [originalCardpool, setOriginalCardpool] = useState("");
+  const { player} = usePlayerContext();
   //const [existingDeck, setExistingDeck] = useState(null);
 
   const [filters, setFilters] = useState({
@@ -531,12 +534,12 @@ export default function DeckBuild() {
         ))}
       </div>
       <br />
-      <button onClick={openModal2}>Load deck</button>
+      {player ? (<div><button onClick={openModal2}>Load deck</button>
       <div className="modal">
         <LoadDeck
           isOpen={isLoad}
           onClose={() => closeModal2()}
-          
+          playerID={player.id}
         />
       </div>
       <button onClick={openModal3}>Save deck</button>
@@ -550,7 +553,7 @@ export default function DeckBuild() {
           mainDeck={mainDeckList}
           
         />
-      </div>
+      </div></div>):null}
       <FilterButtons
         properties={filters}
         onSetProp={(newGrade, newNation) => {
