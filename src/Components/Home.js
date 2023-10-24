@@ -6,11 +6,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_decks = `${URL}/deck/byPlayer`;
 
-
 export default function HomePage() {
   const [deckList, setDeckList] = useState(null);
   const { user, isAuthenticated } = useAuth0();
-  const [playerId, setPlayerId ] = useState(null);
+  const [playerId, setPlayerId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +19,6 @@ export default function HomePage() {
         });
 
         const data = await response.json();
-        
 
         // Set the filtered decks to the state
         setDeckList(data);
@@ -47,40 +45,43 @@ export default function HomePage() {
         }
       }
     };
-    if (!playerId && isAuthenticated){
+    if (!playerId && isAuthenticated) {
       getID();
     }
     if (deckList === null && playerId) {
       fetchData();
     }
-    
   });
 
   return (
     <div>
       <NavBar />
       <h1>Welcome to Vanguard Builder</h1>
-      {isAuthenticated ? <h2>{user.nickname}</h2> : null}
-      <h3>List of your decks:</h3>
-
-      {deckList && (
-        <ul>
-          {Object.values(deckList).map((deck) => (
-            <li key={deck.deck_name}>
-              <button>
-                <Link to={`/analysis?deck=${deck.deck_name}`}>
-                  {deck.deck_name}
-                </Link>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <br />
-      <button>
-        <Link to="/deckbuilder"> Build new deck</Link>
-      </button>
+      {isAuthenticated ? (
+        <div>
+          <h2>{user.nickname}</h2>
+          <h3>List of your decks:</h3>
+          {deckList && (
+            <ul>
+              {Object.values(deckList).map((deck) => (
+                <li key={deck.deck_name}>
+                  <button>
+                    <Link to={`/analysis?deck=${deck.deck_name}`}>
+                      {deck.deck_name}
+                    </Link>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <br />
+          <button>
+            <Link to="/deckbuilder"> Build new deck</Link>
+          </button>{" "}
+        </div>
+      ) : <div><h3>Note: You need to login in order to build a deck</h3><button>
+      <Link to="/deckbuilder"> View Vanguard cards</Link>
+    </button></div>}
     </div>
   );
 }
