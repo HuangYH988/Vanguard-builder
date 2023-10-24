@@ -11,18 +11,19 @@ export default function SaveDeck(prop) {
   const [deckName, setDeckName] = useState("");
   const { user, isAuthenticated, getAccessTokenSilently, loginWithRedirect } =
     useAuth0();
-  const [ accessToken, setAccessToken ] = useState("");
+  const [accessToken, setAccessToken] = useState("");
   const [player, setPlayer] = useState(null);
+  const [deckList, setDeckList] = useState(null);
 
-const checkUser=async()=>{
-  if (isAuthenticated) {
-    let token = await getAccessTokenSilently();
-   
-    setAccessToken(token)
-  } else {
-    loginWithRedirect();
-  }
-}
+  const checkUser = async () => {
+    if (isAuthenticated) {
+      let token = await getAccessTokenSilently();
+
+      setAccessToken(token);
+    } else {
+      loginWithRedirect();
+    }
+  };
 
   useEffect(() => {
     checkUser();
@@ -45,6 +46,24 @@ const checkUser=async()=>{
     };
     if (isAuthenticated && !player) {
       fetchPlayerData();
+    }
+
+    const fetchData2 = async () => {
+      try {
+        const response = await fetch(`${url}/byPlayer/${player.id}`, {
+          method: "GET",
+        });
+
+        const data = await response.json();
+
+        // Set the filtered decks to the state
+        setDeckList(data);
+      } catch (error) {
+        console.error("Error: ", error.message);
+      }
+    };
+    if (deckList === null && player) {
+      fetchData2();
     }
   });
 
@@ -109,7 +128,7 @@ const checkUser=async()=>{
           headers: {
             "Content-Type": "application/json",
             // Add Authorization header if needed
-             "Authorization": `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(requestData),
         });
@@ -129,6 +148,57 @@ const checkUser=async()=>{
     }
   }
 
+  async function editDeck(id) {
+    
+    if (!isAuthenticated) {
+      alert("You need to login first before you can save a deck list.");
+    }
+
+    if (!checkLegit()) {
+      alert(
+        "Your deck is not legitimate. Please make appropriate changes to your deck first."
+      );
+    } else {
+      let requestData={}
+      if (deckName) {
+        requestData = {
+          deck_name: deckName,
+          main_deck: deckList2,
+          ride_deck: rideDeckList,
+          triggers: triggersList,
+        };
+      } else {
+      requestData = {
+          main_deck: deckList2,
+          ride_deck: rideDeckList,
+          triggers: triggersList,
+        };
+      }
+      try {
+        const response = await fetch(`${url}/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            // Add Authorization header if needed
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error:", errorData);
+          alert(`Failed to edit deck. Error: ${errorData.message}`);
+        } else {
+          // Handle successful response if needed
+          alert("Deck editted successfully!");
+        }
+      } catch (error) {
+        console.error("Error:", error.message);
+        alert(`Failed to edit deck. Error: ${error.message}`);
+      }
+    }
+  }
   const handleCloseModal = () => {
     onClose();
   };
@@ -142,21 +212,41 @@ const checkUser=async()=>{
           X
         </button>
       </div>
-      <form onSubmit={saveDeck}>
-        <h3 className="form-labels">Deck Name:</h3>
-        <input
-          type="text"
-          value={deckName}
-          onChange={(e) => setDeckName(e.target.value)}
-          placeholder="name"
-        />
+      <div>
+        <h2>Save as new deck:</h2>
+        <form onSubmit={saveDeck}>
+          <h3 className="form-labels">New Deck Name:</h3>
+          <input
+            type="text"
+            value={deckName}
+            onChange={(e) => setDeckName(e.target.value)}
+            placeholder="name"
+          />
+          <div>
+            <button type="submit">Save Deck</button>
+          </div>
+        </form>
+      </div>
+      <div>
+        <h2>Or as exisitng deck:</h2>
+        {deckList && (
+        <div>
+          {Object.values(deckList).map((deck) => (
+            <li key={deck.deck_name}>
+              <button onClick={() => editDeck(deck.id)}>
+                {deck.deck_name}
+              </button>
+            </li>
+          ))}
+        </div>
+      )}
+        
+      </div>
+      <div clasName="legit-checkers">
         <div>Ride Deck: {i}/4</div>
         <div>Triggers: {triggersList.length}/16</div>
         <div>Main Deck: {deckSize}/50</div>
-        <div>
-          <button type="submit">Save Deck</button>
-        </div>
-      </form>
+      </div>
     </Modal>
   );
 }

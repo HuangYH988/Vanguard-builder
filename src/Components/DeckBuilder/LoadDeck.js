@@ -5,7 +5,7 @@ const URL = process.env.REACT_APP_BACKEND_URL;
 const url = `${URL}/deck`;
 
 export default function LoadDeck(prop) {
-  const { isOpen, onClose, playerID } = prop;
+  const { isOpen, onClose, playerID, loadADeck } = prop;
 
   const [deckList, setDeckList] = useState(null);
   const [deck, setDeck] = useState(null);
@@ -13,22 +13,18 @@ export default function LoadDeck(prop) {
   const handleCloseModal = () => {
     onClose();
   };
-let i =0;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url, {
+        const response = await fetch(`${url}/byPlayer/${playerID}`, {
           method: "GET",
         });
 
         const data = await response.json();
-        // Filter decks based on player_id
-        const playerDecks = Object.values(data).filter(
-          (deck) => deck.player_id === playerID
-        );
 
         // Set the filtered decks to the state
-        setDeckList(playerDecks);
+        setDeckList(data);
       } catch (error) {
         console.error("Error: ", error.message);
       }
@@ -39,34 +35,22 @@ let i =0;
   });
 
   const loadDeck = (dName) => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${url}/byPlayer/${playerID}`, {
-          method: "GET",
-        });
-
-        const data = await response.json();
-        // Filter decks based on player_id
-        for (const deck in data) {
-          if (data[deck].deck_name === dName) {
-            // Set the filtered decks to the state
-            setDeck(data[deck]);
-            break;
-          }
-        }
-      } catch (error) {
-        console.error("Error: ", error.message);
+    // Filter decks based on player_id
+    for (const deck in deckList) {
+      if (deckList[deck].deck_name === dName) {
+        // Set the filtered decks to the state
+        setDeck(deckList[deck]);
+        break;
       }
-    };
-    if (!deck) {
-      fetchData();
-      
     }
-    if(deck && i===0){
-      console.log(deck.deck_name);
-      i++
+
+    if (deck) {
+      
+      loadADeck(deck);
+      onClose();
     }
   };
+
   return (
     <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>

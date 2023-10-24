@@ -147,3 +147,7 @@
   width: 100vw;
   
 }
+
+.legit-checkers div{
+  display: inline-block;
+}

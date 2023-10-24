@@ -155,7 +155,7 @@ export default function Analysis() {
           <button>Export image</button>
           <button>
             <Link to={`/deckbuilder`}>
-              Go to deck edittor
+              Go to list of cards
             </Link>
           </button>
           <button>

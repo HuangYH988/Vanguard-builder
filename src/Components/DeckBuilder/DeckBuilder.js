@@ -5,9 +5,8 @@ import FilterButtons from "../Filter/FilterButtons";
 import LoadDeck from "./LoadDeck";
 import SaveDeck from "./SaveDeck";
 import NavBar from "../../NavBar";
-import { usePlayerContext} from "../../PlayerContext"
+import { usePlayerContext } from "../../PlayerContext";
 import "./cards.css";
-
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 export const url_cards = `${URL}/card`;
@@ -23,8 +22,8 @@ export default function DeckBuild() {
   const [isSave, setIsSave] = useState(false);
   const [filteredCardpool, setFilteredCardpool] = useState("");
   const [originalCardpool, setOriginalCardpool] = useState("");
-  const { player} = usePlayerContext();
-  //const [existingDeck, setExistingDeck] = useState(null);
+  const { player } = usePlayerContext();
+  const [existingDeck, setExistingDeck] = useState(null);
 
   const [filters, setFilters] = useState({
     cardSet: null,
@@ -273,28 +272,31 @@ export default function DeckBuild() {
     const grade = parseInt(card.grade, 10);
     const isUnit = card.card_type === "Unit";
     const isTrigger = card.trigger;
-
-    if (event.ctrlKey && isUnit) {
-      // Set card as ride deck if it is unit and of g0-g3
-      const rideKey = `g${grade}`;
-      if (!rideDeckState[rideKey]) {
-        setShowRideDeck((prevState) => ({ ...prevState, [id]: true }));
-        setRideDeckState((prevState) => ({ ...prevState, [rideKey]: id }));
-      } else {
-        alert("Warning: Cannot set this card as your ride deck!");
+    if (!numOfCards[id] || numOfCards[id] < 4) {
+      if (event.ctrlKey && isUnit) {
+        // Set card as ride deck if it is unit and of g0-g3
+        const rideKey = `g${grade}`;
+        if (!rideDeckState[rideKey]) {
+          setShowRideDeck((prevState) => ({ ...prevState, [id]: true }));
+          setRideDeckState((prevState) => ({ ...prevState, [rideKey]: id }));
+        } else {
+          alert("Warning: Cannot set this card as your ride deck!");
+        }
       }
-    }
 
-    const isVacancy = isDeckLimit();
+      const isVacancy = isDeckLimit();
 
-    if (isTrigger) {
-      setDifferentTriggers(id, isTrigger);
-    } else if (isVacancy) {
-      const newNumOfCards = numOfCards[id] ? numOfCards[id] + 1 : 1;
-      setNumOfCards((prevState) => ({ ...prevState, [id]: newNumOfCards }));
-      setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+      if (isTrigger) {
+        setDifferentTriggers(id, isTrigger);
+      } else if (isVacancy) {
+        const newNumOfCards = numOfCards[id] ? numOfCards[id] + 1 : 1;
+        setNumOfCards((prevState) => ({ ...prevState, [id]: newNumOfCards }));
+        setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+      } else {
+        alert("You have exceeded the upper limit of your deck");
+      }
     } else {
-      alert("You have exceeded the upper limit of your deck");
+      alert("You can only have up to 4 copies of a card in your deck!");
     }
   };
 
@@ -483,11 +485,76 @@ export default function DeckBuild() {
 
     setFilters({ ...filters, cardSet: selectedSet });
   };
+  const loadDeck = (deck) => {
+    setNumOfCards({});
+    setShowRideDeck({});
+    setExistingDeck(deck);
+    for (const rideID in deck.ride_deck) {
+      const rID = deck.ride_deck[rideID];
+      setShowRideDeck((prevState) => ({ ...prevState, [rID]: true }));
+    }
+    setRideDeckState({
+      g0: deck.ride_deck[0],
+      g1: deck.ride_deck[1],
+      g2: deck.ride_deck[2],
+      g3: deck.ride_deck[3],
+    });
+    // Calculate counts from the loaded deck
+    const newNumOfCards = {};
+
+    // Count cards in ride_deck
+    deck.ride_deck.forEach((cardId) => {
+      newNumOfCards[cardId] = (newNumOfCards[cardId] || 0) + 1;
+    });
+
+    // Count cards in triggers
+    deck.triggers.forEach((cardId) => {
+      newNumOfCards[cardId] = (newNumOfCards[cardId] || 0) + 1;
+    });
+
+    // Count cards in main_deck
+    deck.main_deck.forEach((cardId) => {
+      newNumOfCards[cardId] = (newNumOfCards[cardId] || 0) + 1;
+    });
+
+    // Update numOfCards with the counts from the loaded deck
+    setNumOfCards(newNumOfCards);
+    setMainDeckList(deck.main_deck);
+    const newTriggerList = {
+      crit: [],
+      draw: [],
+      front: [],
+      heal: [],
+      over: [],
+    };
+    deck.triggers.forEach((cardID) => {
+      switch (originalCardpool[cardID].trigger) {
+        case "Crit ":
+          newTriggerList.crit.push(cardID);
+          break;
+        case "Draw ":
+          newTriggerList.draw.push(cardID);
+          break;
+        case "Front ":
+          newTriggerList.front.push(cardID);
+          break;
+        case "Heal ":
+          newTriggerList.heal.push(cardID);
+          break;
+        case "Over":
+          newTriggerList.over.push(cardID);
+          break;
+        default:
+          break;
+      }
+    });
+  };
 
   return (
     <div>
-      <NavBar/>
-      <h1>Deck loaded: #Insert deck name</h1>
+      <NavBar />
+      <h1>Deck loaded: </h1>
+      {existingDeck ? <h1>{existingDeck.deck_name}</h1> : <h1>None</h1>}
       <button onClick={openModal}>Filter</button>
       <br />
       <div className="modal">
@@ -534,26 +601,30 @@ export default function DeckBuild() {
         ))}
       </div>
       <br />
-      {player ? (<div><button onClick={openModal2}>Load deck</button>
-      <div className="modal">
-        <LoadDeck
-          isOpen={isLoad}
-          onClose={() => closeModal2()}
-          playerID={player.id}
-        />
-      </div>
-      <button onClick={openModal3}>Save deck</button>
-      <br />
-      <div className="modal">
-        <SaveDeck
-          isOpen={isSave}
-          onClose={() => closeModal3()}
-          rideDeck={rideDeckState}
-          triggers={triggerList}
-          mainDeck={mainDeckList}
-          
-        />
-      </div></div>):null}
+      {player ? (
+        <div>
+          <button onClick={openModal2}>Load deck</button>
+          <div className="modal">
+            <LoadDeck
+              isOpen={isLoad}
+              onClose={() => closeModal2()}
+              playerID={player.id}
+              loadADeck={(deck) => loadDeck(deck)}
+            />
+          </div>
+          <button onClick={openModal3}>Save deck</button>
+          <br />
+          <div className="modal">
+            <SaveDeck
+              isOpen={isSave}
+              onClose={() => closeModal3()}
+              rideDeck={rideDeckState}
+              triggers={triggerList}
+              mainDeck={mainDeckList}
+            />
+          </div>
+        </div>
+      ) : null}
       <FilterButtons
         properties={filters}
         onSetProp={(newGrade, newNation) => {
