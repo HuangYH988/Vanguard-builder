@@ -6,6 +6,7 @@ import LoadDeck from "./LoadDeck";
 import SaveDeck from "./SaveDeck";
 import NavBar from "../../NavBar";
 import { usePlayerContext } from "../../PlayerContext";
+import { ArraytoList } from "../Convert";
 import "./cards.css";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -29,7 +30,10 @@ export default function DeckBuild() {
     cardSet: null,
     grade: "3",
     nation: "Dragon Empire",
-    card_name: null,
+    cardName: null,
+    cardType: null,
+    hasCC:false,
+    hasSC: false
   });
 
   const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each button's state
@@ -245,9 +249,30 @@ export default function DeckBuild() {
             card.card_number.includes(filters.cardSet)
           )
         : filterByGradeNation;
-
+      const filteredCards2 = filters.cardName
+        ? filteredCards.filter((card) =>
+            card.cardName
+              .toLowerCase()
+              .includes(filters.cardName.toLowerCase())
+          )
+        : filteredCards;
+        const filteredCard3 = filters.cardType
+        ? filteredCards2.filter((card) =>
+            card.card_type.includes(filters.cardType)
+          )
+        : filteredCards2;
+        const filteredCard4 = filters.hasCC
+        ? filteredCard3.filter((card) =>
+            card.counter_charge
+          )
+        : filteredCard3;
+        const filteredCard5 = filters.hasSC
+        ? filteredCard4.filter((card) =>
+            card.soul_charge
+          )
+        : filteredCard4;
       // Update the state with the filtered cards
-      setFilteredCardpool(filteredCards);
+      setFilteredCardpool(filteredCard5);
     }
   }, [originalCardpool, filters]);
 
@@ -256,7 +281,7 @@ export default function DeckBuild() {
     setHoveredEffect(card.effect);
     setSentinel(card.is_sentinel);
     setTrigger(card.trigger);
-    setCardName(card.card_name);
+    setCardName(card.cardName);
   };
 
   const onHoverOut = () => {
@@ -269,8 +294,9 @@ export default function DeckBuild() {
 
   const onClick = (event, card) => {
     const id = card.id;
+    console.log(id)
     const grade = parseInt(card.grade, 10);
-    const isUnit = card.card_type === "Unit";
+    const isUnit = card.cardType === "Unit";
     const isTrigger = card.trigger;
     if (!numOfCards[id] || numOfCards[id] < 4) {
       if (event.ctrlKey && isUnit) {
@@ -520,34 +546,8 @@ export default function DeckBuild() {
     // Update numOfCards with the counts from the loaded deck
     setNumOfCards(newNumOfCards);
     setMainDeckList(deck.main_deck);
-    const newTriggerList = {
-      crit: [],
-      draw: [],
-      front: [],
-      heal: [],
-      over: [],
-    };
-    deck.triggers.forEach((cardID) => {
-      switch (originalCardpool[cardID].trigger) {
-        case "Crit ":
-          newTriggerList.crit.push(cardID);
-          break;
-        case "Draw ":
-          newTriggerList.draw.push(cardID);
-          break;
-        case "Front ":
-          newTriggerList.front.push(cardID);
-          break;
-        case "Heal ":
-          newTriggerList.heal.push(cardID);
-          break;
-        case "Over":
-          newTriggerList.over.push(cardID);
-          break;
-        default:
-          break;
-      }
-    });
+    const newTriggerList = ArraytoList(deck.triggers, originalCardpool);
+    setTriggerList(newTriggerList);
   };
 
   return (
@@ -561,8 +561,15 @@ export default function DeckBuild() {
         <Filter
           isOpen={isFilter}
           onClose={(set) => closeModal(set)}
-          onFilterSelect={(set, name) => {
-            setFilters({ ...filters, cardSet: set, card_name: name });
+          onFilterSelect={(filterCond) => {
+            setFilters({
+              ...filters,
+              cardSet: filterCond[0],
+              cardName: filterCond[1],
+              cardType: filterCond[2],
+              hasCC: filterCond[3],
+              hasSC: filterCond[4],
+            });
           }}
         />
       </div>

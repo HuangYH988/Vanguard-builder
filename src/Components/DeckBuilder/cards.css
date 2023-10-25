@@ -16,7 +16,7 @@
   position: absolute; /* Set the text to absolute positioning */
   top: 45px;
   left: 12px;
-  z-index: 1;
+  z-index: 0;
   color: rgb(186, 223, 245);
   border: 1px solid white;
   background-color: rgb(56, 43, 43);
@@ -27,7 +27,7 @@
   position: absolute; /* Set the text to absolute positioning */
   top: 75px;
   left: 38px;
-  z-index: 1;
+  z-index: 0;
   color: rgb(244, 196, 196);
   border: 1px solid white;
   background-color: rgb(39, 51, 62);
@@ -43,13 +43,15 @@
   right: 0;
   top: 0;
   z-index: 1;
-  width: 250px;
+  width: 300px;
   padding:5px;
   background-color: aliceblue;
   display: flex;
   flex-direction: column;
   align-items: center; /* Center horizontally */
   text-align: left; /* Align text to the left */
+  /* overflow-wrap: break-word;
+  white-space: pre; */
 }
 
 .preview-image img {
@@ -58,6 +60,9 @@
 }
 .preview-image p {
   padding:10px;
+  
+  
+ 
 }
 
 .ride-display {
@@ -135,7 +140,7 @@
 }
 
 .modal{
-  z-index: 2;
+  z-index: 1;
 }
 
 .grade-nation-filter{

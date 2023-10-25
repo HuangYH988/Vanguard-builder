@@ -1,6 +1,7 @@
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { ListtoArray } from "../Convert";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url = `${URL}/deck`;
@@ -69,18 +70,14 @@ export default function SaveDeck(prop) {
 
   const deckList2 = [];
   const rideDeckList = [rideDeck.g0, rideDeck.g1, rideDeck.g2, rideDeck.g3];
-  const triggersList = [];
+  const triggersList = ListtoArray(triggers);
   let i = 0;
   for (const grade in rideDeck) {
     if (rideDeck[grade] !== null) {
       i++;
     }
   }
-  for (const type in triggers) {
-    for (let i = 0; i < triggers[type].length; i++) {
-      triggersList.push(triggers[type][i]);
-    }
-  }
+  
   for (const id in mainDeck) {
     deckList2.push(mainDeck[id]);
   }

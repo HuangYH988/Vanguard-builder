@@ -5,7 +5,12 @@ export default function Filter(props) {
   const { isOpen, onClose, onFilterSelect } = props;
   const [selectedSet, setSelectedSet] = useState("");
   const [selectedSubSet, setSelectedSubSet] = useState("");
-  const [nameFilter, setNameFilter]= useState("");
+  const [nameFilter, setNameFilter] = useState("");
+  const [isSoulCharge, setIsSoulCharge] = useState(false);
+  const [isCounterCharge, setIsCounterCharge] = useState(false);
+  const [unitOrder, setUnitOrder] = useState("");
+  const [orderType, setOrderType] = useState("");
+  const nullArray = [];
 
   const handleSelectChange = (event) => {
     setSelectedSet(event.target.value);
@@ -16,16 +21,58 @@ export default function Filter(props) {
     setSelectedSubSet(event.target.value);
   };
 
+  const handleSelectChange2 = (event) => {
+    setUnitOrder(event.target.value);
+    // Reset the second select when the first select changes
+  };
+
+  const handleSubSetChange2 = (event) => {
+    setOrderType(event.target.value);
+  };
+
+  const handleIsSoulChargeChange = (event) => {
+    setIsSoulCharge(event.target.checked);
+  };
+
+  const handleIsCounterChargeChange = (event) => {
+    setIsCounterCharge(event.target.checked);
+  };
+
   const handleCloseModal = () => {
+    const filterCond = [];
     onClose();
-    onFilterSelect(selectedSubSet,nameFilter);
+    if (selectedSet === "PR") {
+      filterCond.push("PR");
+      nullArray.push(null);
+    } else {
+      filterCond.push(selectedSubSet);
+      nullArray.push(null);
+    }
+    filterCond.push(nameFilter);
+    nullArray.push(null);
+    if (unitOrder === "Unit") {
+      filterCond.push("Unit");
+      nullArray.push(null);
+    } else if (orderType === "Any") {
+      filterCond.push("Order");
+      nullArray.push(null);
+    } else {
+      filterCond.push(orderType);
+      nullArray.push(null);
+    }
+    filterCond.push(isCounterCharge,isSoulCharge)
+    nullArray.push(null,null)
+    onFilterSelect(filterCond);
   };
 
   const handleResetFilter = () => {
     onClose();
     setSelectedSet("");
     setSelectedSubSet("");
-    onFilterSelect(null, null);
+    onFilterSelect(nullArray);
+    setNameFilter("");
+    setIsCounterCharge(false);
+    setIsSoulCharge(false)
   };
 
   // Define the options for the second select based on the first select value
@@ -48,6 +95,15 @@ export default function Filter(props) {
       },
       "Special sets:": {},
     }[selectedSet] || [];
+  const orderOptions =
+    {
+      Order: {
+        1: "Any",
+        2: "Normal Order",
+        3: "Blitz Order",
+        4: "Set Order",
+      },
+    }[unitOrder] || [];
 
   return (
     <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
@@ -59,7 +115,7 @@ export default function Filter(props) {
           X
         </button>
       </div>
-      <div>Criterias for filter:</div>
+      <h3>Search by set:</h3>
       <select value={selectedSet} onChange={handleSelectChange}>
         <option>Select the set:</option>
         <option>Start/Trial Decks</option>
@@ -85,6 +141,53 @@ export default function Filter(props) {
           </select>
         </div>
       )}
+      <div>
+        <h3 className="form-labels">Search by card name:</h3>
+        <input
+          type="text"
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+          placeholder="name"
+        />
+      </div>
+      <h3>Unit/Order:</h3>
+      <select value={unitOrder} onChange={handleSelectChange2}>
+        <option value="Unit">Unit</option>
+        <option>Order</option>
+      </select>
+      {unitOrder && (
+        <div>
+          <div>Select the sub-set:</div>
+          <select
+            value={orderType}
+            onChange={handleSubSetChange2}
+            disabled={!orderOptions || Object.keys(orderOptions).length === 0}
+          >
+            <option>Select order type:</option>
+            {Object.entries(orderOptions).map(([key, value], index) => (
+              <option key={index} value={value}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      <div>
+        <h3>Counter Charge:</h3>
+        <input
+          type="checkbox"
+          checked={isCounterCharge}
+          onChange={handleIsCounterChargeChange}
+        />
+      </div>
+      <div>
+        <h3>Soul Charge:</h3>
+        <input
+          type="checkbox"
+          checked={isSoulCharge}
+          onChange={handleIsSoulChargeChange}
+        />
+      </div>
 
       <br />
       <button onClick={handleCloseModal}>Filter</button>
