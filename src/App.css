@@ -39,5 +39,10 @@
     transform: rotate(360deg);
   }
 }
+.copyright{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
 
 

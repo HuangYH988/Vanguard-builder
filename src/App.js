@@ -22,7 +22,7 @@ function App() {
         <Route path="/deckbuilder" element={<DeckBuild />} />
         <Route path="/*" element={<Error />} />
       </Routes>
-      
+      <div className="copyright">All images copyright© Bushiroad Pte. Ltd.</div>
     </div>
   );
 }
