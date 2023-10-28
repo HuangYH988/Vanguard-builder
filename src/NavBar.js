@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { usePlayerContext } from "./PlayerContext";
@@ -8,10 +8,23 @@ const URL = process.env.REACT_APP_BACKEND_URL;
 const url_player = `${URL}/player`;
 
 export default function NavBar() {
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, logout, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [userList, setUserList] = useState(null);
   const { player, setPlayer } = usePlayerContext();
+  const [accessToken, setAccessToken] = useState("");
+
+  
+
   useEffect(() => {
+    const checkUser = async () => {
+      if (isAuthenticated) {
+        let token = await getAccessTokenSilently();
+  
+        setAccessToken(token);
+      } else {
+        loginWithRedirect();
+      }
+    };
     const fetchData = async () => {
       try {
         const response = await fetch(url_player, {
@@ -48,7 +61,7 @@ export default function NavBar() {
           headers: {
             "Content-Type": "application/json",
             // Add Authorization header if needed
-            // "Authorization": `Bearer ${accessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
           },
           body: JSON.stringify(requestData),
         });
@@ -60,6 +73,7 @@ export default function NavBar() {
       }
     };
     if(isAuthenticated && !player){
+      checkUser();
       const isNew = checkNew();
         if (isNew){
             createPlayer();
@@ -74,7 +88,7 @@ export default function NavBar() {
               }
         }
     }
-  },[userList, isAuthenticated, player,setPlayer, user]);
+  },[userList, isAuthenticated, player,setPlayer, user, getAccessTokenSilently,loginWithRedirect, accessToken]);
 
   return (
     <AppBar position="static" style={{ backgroundColor: "#e1f4fa" }}>
@@ -100,7 +114,7 @@ export default function NavBar() {
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div style={{ flexGrow: 1 }}></div>
         {isAuthenticated ? (
-          <button
+          <Button
             onClick={() =>
               logout({ logoutParams: { returnTo: window.location.origin } })
             }
@@ -108,14 +122,14 @@ export default function NavBar() {
             <Typography variant="body1" style={{ color: "#063846" }}>
               LOG OUT
             </Typography>
-          </button>
+          </Button>
         ) : (
-          <button onClick={() => loginWithRedirect()}>
+          <Button onClick={() => loginWithRedirect()}>
             {" "}
             <Typography variant="body1" style={{ color: "#063846" }}>
               Log In{" "}
             </Typography>
-          </button>
+          </Button>
         )}
       </Toolbar>
     </AppBar>

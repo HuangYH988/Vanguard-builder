@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ListtoArray } from "../Convert";
+import { Button } from "@mui/material";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url = `${URL}/deck`;
@@ -202,12 +203,12 @@ export default function SaveDeck(prop) {
   return (
     <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
+        <Button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
         >
           X
-        </button>
+        </Button>
       </div>
       <div>
         <h2>Save as new deck:</h2>
@@ -220,7 +221,7 @@ export default function SaveDeck(prop) {
             placeholder="name"
           />
           <div>
-            <button type="submit">Save Deck</button>
+            <Button type="submit">Save Deck</Button>
           </div>
         </form>
       </div>
@@ -230,9 +231,9 @@ export default function SaveDeck(prop) {
         <div>
           {Object.values(deckList).map((deck) => (
             <li key={deck.deck_name}>
-              <button onClick={() => editDeck(deck.id)}>
+              <Button onClick={() => editDeck(deck.id)}>
                 {deck.deck_name}
-              </button>
+              </Button>
             </li>
           ))}
         </div>

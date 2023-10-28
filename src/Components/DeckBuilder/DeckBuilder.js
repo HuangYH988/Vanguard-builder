@@ -7,6 +7,7 @@ import SaveDeck from "./SaveDeck";
 import NavBar from "../../NavBar";
 import { usePlayerContext } from "../../PlayerContext";
 import { ArraytoList } from "../Convert";
+import { Button } from "@mui/material";
 import "./cards.css";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -36,7 +37,7 @@ export default function DeckBuild() {
     hasSC: false
   });
 
-  const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each button's state
+  const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each Button's state
   const [numOfCards, setNumOfCards] = useState({});
 
   const [rideDeckState, setRideDeckState] = useState({
@@ -281,7 +282,7 @@ export default function DeckBuild() {
     setHoveredEffect(card.effect);
     setSentinel(card.is_sentinel);
     setTrigger(card.trigger);
-    setCardName(card.cardName);
+    setCardName(card.card_name);
   };
 
   const onHoverOut = () => {
@@ -349,7 +350,7 @@ export default function DeckBuild() {
       }
       setShowRideDeck((prevState) => ({
         ...prevState,
-        [id]: false, // Set the state for this specific button to false
+        [id]: false, // Set the state for this specific Button to false
       }));
     }
     let indexToRemove;
@@ -555,7 +556,7 @@ export default function DeckBuild() {
       <NavBar />
       <h1>Deck loaded: </h1>
       {existingDeck ? <h1>{existingDeck.deck_name}</h1> : <h1>None</h1>}
-      <button onClick={openModal}>Filter</button>
+      <Button onClick={openModal}>Filter</Button>
       <br />
       <div className="modal">
         <Filter
@@ -610,7 +611,7 @@ export default function DeckBuild() {
       <br />
       {player ? (
         <div>
-          <button onClick={openModal2}>Load deck</button>
+          <Button onClick={openModal2}>Load deck</Button>
           <div className="modal">
             <LoadDeck
               isOpen={isLoad}
@@ -619,7 +620,7 @@ export default function DeckBuild() {
               loadADeck={(deck) => loadDeck(deck)}
             />
           </div>
-          <button onClick={openModal3}>Save deck</button>
+          <Button onClick={openModal3}>Save deck</Button>
           <br />
           <div className="modal">
             <SaveDeck
@@ -642,9 +643,9 @@ export default function DeckBuild() {
           }));
         }}
       />
-      <button>
+      <Button>
         <Link to="/">Back to homepage</Link>
-      </button>
+      </Button>
     </div>
   );
 }

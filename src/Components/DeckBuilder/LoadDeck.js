@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
+import { Button } from "@mui/material";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url = `${URL}/deck`;
@@ -54,20 +55,20 @@ export default function LoadDeck(prop) {
   return (
     <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
+        <Button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
         >
           X
-        </button>
+        </Button>
       </div>
       {deckList && (
         <div>
           {Object.values(deckList).map((deck) => (
             <li key={deck.deck_name}>
-              <button onClick={() => loadDeck(deck.deck_name)}>
+              <Button onClick={() => loadDeck(deck.deck_name)}>
                 {deck.deck_name}
-              </button>
+              </Button>
             </li>
           ))}
         </div>

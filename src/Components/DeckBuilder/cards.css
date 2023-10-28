@@ -44,7 +44,7 @@
   top: 0;
   z-index: 1;
   width: 300px;
-  padding:5px;
+  padding: 5px;
   background-color: aliceblue;
   display: flex;
   flex-direction: column;
@@ -55,14 +55,11 @@
 }
 
 .preview-image img {
-  width:240px;
+  width: 240px;
   max-width: 100%; /* Ensure the image doesn't exceed the container width */
 }
 .preview-image p {
-  padding:10px;
-  
-  
- 
+  padding: 10px;
 }
 
 .ride-display {
@@ -79,7 +76,6 @@
 .trigger-display {
   display: inline-block;
   margin: 0px;
-  
 }
 
 .trig-count {
@@ -139,20 +135,19 @@
   font-size: 20px;
 }
 
-.modal{
+.modal {
   z-index: 1;
 }
 
-.grade-nation-filter{
+.grade-nation-filter {
   z-index: 1;
-  border:2px solid black;
+  border: 2px solid black;
   background-color: rgba(213, 228, 228, 0.774);
   position: fixed;
   bottom: 0px;
   width: 100vw;
-  
 }
 
-.legit-checkers div{
+.legit-checkers div {
   display: inline-block;
 }

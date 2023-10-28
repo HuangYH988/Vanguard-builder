@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../NavBar";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "@mui/material";
+
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_decks = `${URL}/deck/byPlayer`;
@@ -61,6 +63,7 @@ export default function HomePage() {
         <div>
           <h2>{user.nickname}</h2>
           <h3>List of your decks:</h3>
+          {console.log(playerId)}
           {deckList && (
             <ul>
               {Object.values(deckList).map((deck) => (
@@ -75,13 +78,18 @@ export default function HomePage() {
             </ul>
           )}
           <br />
-          <button>
+          <Button>
             <Link to="/deckbuilder"> Build new deck</Link>
-          </button>{" "}
+          </Button>{" "}
         </div>
-      ) : <div><h3>Note: You need to login in order to build a deck</h3><button>
-      <Link to="/deckbuilder"> View Vanguard cards</Link>
-    </button></div>}
+      ) : (
+        <div>
+          <h3>Note: You need to login in order to build a deck</h3>
+          <Button>
+            <Link to="/deckbuilder"> View Vanguard cards</Link>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

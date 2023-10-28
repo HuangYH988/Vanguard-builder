@@ -5,6 +5,7 @@ import RideDeck from "./RideDeck";
 import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "@mui/material";
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -152,16 +153,16 @@ export default function Analysis() {
           <MainDeck mainDeck={mainDeck} cardpool={originalCardpool} />
 
           <br />
-          <button>Export image</button>
-          <button>
+          <Button>Export image</Button>
+          <Button>
             <Link to={`/deckbuilder`}>
               Go to list of cards
             </Link>
-          </button>
-          <button>
+          </Button>
+          <Button>
             {" "}
             <Link to="/"> Back to homepage</Link>
-          </button>
+          </Button>
         </div>
       )}
     </div>

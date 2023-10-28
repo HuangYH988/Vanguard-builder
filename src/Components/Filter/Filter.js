@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { useState } from "react";
+import { Button } from "@mui/material";
 
 export default function Filter(props) {
   const { isOpen, onClose, onFilterSelect } = props;
@@ -108,12 +109,12 @@ export default function Filter(props) {
   return (
     <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
+        <Button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
         >
           X
-        </button>
+        </Button>
       </div>
       <h3>Search by set:</h3>
       <select value={selectedSet} onChange={handleSelectChange}>
@@ -190,8 +191,8 @@ export default function Filter(props) {
       </div>
 
       <br />
-      <button onClick={handleCloseModal}>Filter</button>
-      <button onClick={handleResetFilter}>Reset filter</button>
+      <Button onClick={handleCloseModal}>Filter</Button>
+      <Button onClick={handleResetFilter}>Reset filter</Button>
     </Modal>
   );
 }
