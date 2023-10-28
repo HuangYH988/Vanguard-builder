@@ -1,6 +1,7 @@
 import Modal from "react-modal";
 import { useState } from "react";
 import { Button } from "@mui/material";
+import { customStyles } from "../Convert";
 
 export default function Filter(props) {
   const { isOpen, onClose, onFilterSelect } = props;
@@ -107,14 +108,15 @@ export default function Filter(props) {
     }[unitOrder] || [];
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
+    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+      <div style={customStyles.modalBackground}></div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
+        <button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
         >
           X
-        </Button>
+        </button>
       </div>
       <h3>Search by set:</h3>
       <select value={selectedSet} onChange={handleSelectChange}>
@@ -191,8 +193,8 @@ export default function Filter(props) {
       </div>
 
       <br />
-      <Button onClick={handleCloseModal}>Filter</Button>
-      <Button onClick={handleResetFilter}>Reset filter</Button>
+      <Button variant="contained" onClick={handleCloseModal}>Filter</Button>
+      <Button variant="contained" color="secondary" onClick={handleResetFilter}>Reset filter</Button>
     </Modal>
   );
 }

@@ -6,6 +6,7 @@ import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -153,13 +154,13 @@ export default function Analysis() {
           <MainDeck mainDeck={mainDeck} cardpool={originalCardpool} />
 
           <br />
-          <Button>Export image</Button>
-          <Button>
+          <Button variant="contained">Export image</Button>
+          <Button variant="outlined" endIcon={<SendIcon/>}>
             <Link to={`/deckbuilder`}>
               Go to list of cards
             </Link>
           </Button>
-          <Button>
+          <Button variant="outlined" endIcon={<SendIcon/>}>
             {" "}
             <Link to="/"> Back to homepage</Link>
           </Button>

@@ -1,6 +1,7 @@
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
+import { customStyles } from "../Convert";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url = `${URL}/deck`;
@@ -53,20 +54,22 @@ export default function LoadDeck(prop) {
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
+    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+      <div style={customStyles.modalBackground2}></div>
+      <h2>Select a deck</h2>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
+        <button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
         >
           X
-        </Button>
+        </button>
       </div>
       {deckList && (
         <div>
           {Object.values(deckList).map((deck) => (
             <li key={deck.deck_name}>
-              <Button onClick={() => loadDeck(deck.deck_name)}>
+              <Button onClick={() => loadDeck(deck.deck_name)} variant="contained" color="success">
                 {deck.deck_name}
               </Button>
             </li>

@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ListtoArray } from "../Convert";
+import { ListtoArray, customStyles } from "../Convert";
 import { Button } from "@mui/material";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -201,14 +201,15 @@ export default function SaveDeck(prop) {
     onClose();
   };
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal}>
+    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+      <div style={customStyles.modalBackground2}></div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
+        <button
           onClick={handleCloseModal}
           style={{ cursor: "pointer", padding: "5px" }}
         >
           X
-        </Button>
+        </button>
       </div>
       <div>
         <h2>Save as new deck:</h2>
@@ -221,7 +222,7 @@ export default function SaveDeck(prop) {
             placeholder="name"
           />
           <div>
-            <Button type="submit">Save Deck</Button>
+            <Button type="submit" variant="contained" color="secondary">Save Deck</Button>
           </div>
         </form>
       </div>
@@ -231,7 +232,7 @@ export default function SaveDeck(prop) {
         <div>
           {Object.values(deckList).map((deck) => (
             <li key={deck.deck_name}>
-              <Button onClick={() => editDeck(deck.id)}>
+              <Button onClick={() => editDeck(deck.id)} variant="contained" color="secondary">
                 {deck.deck_name}
               </Button>
             </li>

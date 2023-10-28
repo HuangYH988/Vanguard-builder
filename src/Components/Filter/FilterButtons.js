@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, ButtonGroup } from "@mui/material";
 import imgDE from "../Images/Icon_DEOD.webp";
 import imgDS from "../Images/Icon_DS.webp";
 import imgKS from "../Images/Icon_KS.webp";
@@ -30,7 +30,8 @@ export default function FilterButtons(prop) {
 
   return (
     <div className="grade-nation-filter">
-      <div>Current selected grade: {grade}</div>
+      <div>Grade {grade}</div>
+      <ButtonGroup variant="contained">
       <Button onClick={onClickGrade} value={0} disabled={grade === "0"}>
         0
       </Button>
@@ -45,8 +46,9 @@ export default function FilterButtons(prop) {
       </Button>
       <Button onClick={onClickGrade} value={4} disabled={grade === "4"}>
         4+
-      </Button>
-      <div>Current selected nation: {nation}</div>
+      </Button></ButtonGroup>
+      <div>{nation}</div>
+      <ButtonGroup variant="contained">
       <Button
         onClick={onClickNation}
         value={"Dragon Empire"}
@@ -88,7 +90,7 @@ export default function FilterButtons(prop) {
         disabled={nation === "Elemental"}
       >
         Elemental
-      </Button>
+      </Button></ButtonGroup>
     </div>
   );
 }

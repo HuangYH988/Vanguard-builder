@@ -100,12 +100,7 @@ export default function NavBar() {
           </Link>
         </Typography>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <Typography variant="body1" style={{ color: "#063846" }}>
-          <Link to="/about" style={{ textDecoration: "none" }}>
-            ABOUT
-          </Link>
-        </Typography>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
         <Typography variant="body1" style={{ color: "#063846" }}>
           <Link to="/about" style={{ textDecoration: "none" }}>
             FAQ

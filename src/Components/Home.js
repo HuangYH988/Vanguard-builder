@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import NavBar from "../NavBar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
-
+import SendIcon from '@mui/icons-material/Send';
+import About from "./Information/About";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_decks = `${URL}/deck/byPlayer`;
@@ -61,10 +62,10 @@ export default function HomePage() {
       <h1>Welcome to Vanguard Builder</h1>
       {isAuthenticated ? (
         <div>
-          <h2>{user.nickname}</h2>
-          <h3>List of your decks:</h3>
-          {console.log(playerId)}
-          {deckList && (
+          <h2>hello, {user.nickname}</h2>
+          <h3>Here is your list of decks:</h3>
+
+          {deckList ? (
             <ul>
               {Object.values(deckList).map((deck) => (
                 <li key={deck.deck_name}>
@@ -76,20 +77,21 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-          )}
+          ):<p>You have not created any decks here yet. Start creating one by selecting cards from our cardpool!</p>}
           <br />
-          <Button>
-            <Link to="/deckbuilder"> Build new deck</Link>
+          <Button variant="outlined" endIcon={<SendIcon/>}>
+            <Link to="/deckbuilder"> Build new deck/View cards</Link>
           </Button>{" "}
         </div>
       ) : (
         <div>
           <h3>Note: You need to login in order to build a deck</h3>
-          <Button>
+          <Button variant="outlined" endIcon={<SendIcon/>}>
             <Link to="/deckbuilder"> View Vanguard cards</Link>
           </Button>
         </div>
       )}
+      <About />
     </div>
   );
 }

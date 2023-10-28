@@ -8,6 +8,7 @@ import NavBar from "../../NavBar";
 import { usePlayerContext } from "../../PlayerContext";
 import { ArraytoList } from "../Convert";
 import { Button } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import "./cards.css";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -33,8 +34,8 @@ export default function DeckBuild() {
     nation: "Dragon Empire",
     cardName: null,
     cardType: null,
-    hasCC:false,
-    hasSC: false
+    hasCC: false,
+    hasSC: false,
   });
 
   const [showRideDeck, setShowRideDeck] = useState({}); // Object to track each Button's state
@@ -252,25 +253,19 @@ export default function DeckBuild() {
         : filterByGradeNation;
       const filteredCards2 = filters.cardName
         ? filteredCards.filter((card) =>
-            card.cardName
-              .toLowerCase()
-              .includes(filters.cardName.toLowerCase())
+            card.cardName.toLowerCase().includes(filters.cardName.toLowerCase())
           )
         : filteredCards;
-        const filteredCard3 = filters.cardType
+      const filteredCard3 = filters.cardType
         ? filteredCards2.filter((card) =>
             card.card_type.includes(filters.cardType)
           )
         : filteredCards2;
-        const filteredCard4 = filters.hasCC
-        ? filteredCard3.filter((card) =>
-            card.counter_charge
-          )
+      const filteredCard4 = filters.hasCC
+        ? filteredCard3.filter((card) => card.counter_charge)
         : filteredCard3;
-        const filteredCard5 = filters.hasSC
-        ? filteredCard4.filter((card) =>
-            card.soul_charge
-          )
+      const filteredCard5 = filters.hasSC
+        ? filteredCard4.filter((card) => card.soul_charge)
         : filteredCard4;
       // Update the state with the filtered cards
       setFilteredCardpool(filteredCard5);
@@ -295,7 +290,7 @@ export default function DeckBuild() {
 
   const onClick = (event, card) => {
     const id = card.id;
-    console.log(id)
+    console.log(id);
     const grade = parseInt(card.grade, 10);
     const isUnit = card.cardType === "Unit";
     const isTrigger = card.trigger;
@@ -554,9 +549,13 @@ export default function DeckBuild() {
   return (
     <div>
       <NavBar />
-      <h1>Deck loaded: </h1>
-      {existingDeck ? <h1>{existingDeck.deck_name}</h1> : <h1>None</h1>}
-      <Button onClick={openModal}>Filter</Button>
+      <h1>
+        Deck loaded: {existingDeck ? `${existingDeck.deck_name}` : "None"}
+      </h1>
+
+      <Button onClick={openModal} variant="contained">
+        Filter
+      </Button>
       <br />
       <div className="modal">
         <Filter
@@ -611,7 +610,9 @@ export default function DeckBuild() {
       <br />
       {player ? (
         <div>
-          <Button onClick={openModal2}>Load deck</Button>
+          <Button onClick={openModal2} variant="contained" color="success">
+            Load deck
+          </Button>
           <div className="modal">
             <LoadDeck
               isOpen={isLoad}
@@ -620,7 +621,9 @@ export default function DeckBuild() {
               loadADeck={(deck) => loadDeck(deck)}
             />
           </div>
-          <Button onClick={openModal3}>Save deck</Button>
+          <Button onClick={openModal3} variant="contained" color="secondary">
+            Save deck
+          </Button>
           <br />
           <div className="modal">
             <SaveDeck
@@ -633,17 +636,19 @@ export default function DeckBuild() {
           </div>
         </div>
       ) : null}
-      <FilterButtons
-        properties={filters}
-        onSetProp={(newGrade, newNation) => {
-          setFilters((prevFilters) => ({
-            ...prevFilters,
-            grade: newGrade,
-            nation: newNation,
-          }));
-        }}
-      />
-      <Button>
+      {!isLoad && !isSave && !isFilter && (
+        <FilterButtons
+          properties={filters}
+          onSetProp={(newGrade, newNation) => {
+            setFilters((prevFilters) => ({
+              ...prevFilters,
+              grade: newGrade,
+              nation: newNation,
+            }));
+          }}
+        />
+      )}
+      <Button variant="outlined" endIcon={<SendIcon />}>
         <Link to="/">Back to homepage</Link>
       </Button>
     </div>
