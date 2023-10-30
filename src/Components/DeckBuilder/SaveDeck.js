@@ -228,7 +228,10 @@ export default function SaveDeck(prop) {
           )}
           <div
             className="deck-require"
-            style={{ backgroundColor: i === 4 ? "green" : "red" }}
+            style={{
+              backgroundColor: i === 4 ? "green" : "red",
+              color: i === 4 ? "rgb(93, 215, 239)" : "rgb(130, 130, 6)",
+            }}
           >
             Ride Deck: {i}/4
           </div>
@@ -236,28 +239,39 @@ export default function SaveDeck(prop) {
             className="deck-require"
             style={{
               backgroundColor: triggersList.length === 16 ? "green" : "red",
+              color:
+                triggersList.length === 16
+                  ? "rgb(93, 215, 239)"
+                  : "rgb(130, 130, 6)",
             }}
           >
             Triggers: {triggersList.length}/16
           </div>
           <div
             className="deck-require"
-            style={{ backgroundColor: deckSize === 50 ? "green" : "red" }}
+            style={{
+              backgroundColor: deckSize === 50 ? "green" : "red",
+              color:
+                deckSize === 50 ? "rgb(93, 215, 239)" : "rgb(130, 130, 6)",
+            }}
           >
             Main Deck: {deckSize}/50
           </div>
         </div>
       </div>
       <div>
-        <h2>Save as new deck:</h2>
         <form onSubmit={saveDeck}>
-          <h3 className="form-labels">New Deck Name:</h3>
+          <h2 className="form-labels">
+            Give your deck a name (compulsory for new deck, not compulsory for
+            editting exisitng deck)
+          </h2>
           <input
             type="text"
             value={deckName}
             onChange={(e) => setDeckName(e.target.value)}
             placeholder="name"
           />
+          <h3>Save as new deck:</h3>
           <div>
             <Button type="submit" variant="contained" color="secondary">
               Save Deck
@@ -266,7 +280,7 @@ export default function SaveDeck(prop) {
         </form>
       </div>
       <div>
-        <h2>Or as exisitng deck:</h2>
+        <h3>Or as exisitng deck:</h3>
         {deckList && (
           <div>
             {Object.values(deckList).map((deck) => (

@@ -45,22 +45,25 @@
   top: 0;
   z-index: 1;
   width: 250px;
-  padding: 5px;
-  background-color: aliceblue;
+  padding-left: 5px;
+  background-color: rgb(18, 32, 45);
+  color: rgb(213, 230, 152);
   display: flex;
   flex-direction: column;
   align-items: center; /* Center horizontally */
   text-align: left; /* Align text to the left */
-  /* overflow-wrap: break-word;
-  white-space: pre; */
+  border: 5px solid rgb(70, 19, 19);
+  border-radius: 0px 0px 0px 20px;
 }
 
 .preview-image img {
   width: 240px;
   max-width: 100%; /* Ensure the image doesn't exceed the container width */
+  border: 2px solid white;
 }
 .preview-image p {
-  padding: 10px;
+  padding-top: 5px;
+  padding-left: 5px;
 }
 
 .ride-display {
@@ -147,13 +150,12 @@
   position: fixed;
   bottom: 0px;
   width: 98vw;
-  border-top-left-radius: 50px; 
-  border-top-right-radius: 50px; 
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
 }
 
 .legit-checkers {
   display: flex;
- 
   align-items: center;
   justify-content: space-evenly;
   background-color: rgb(245, 245, 120);
@@ -163,21 +165,33 @@
 
 .deck-require {
   background-color: red;
-
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 95px;
   width: 200px;
-  border: 1px solid black;  
+  border: 1px solid black;
+  margin: 5px;
+  
+  font-weight: bold;
+  
 }
 
-.about-container{
+
+
+.about-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.about-description{
+.about-description {
   border: 1px solid black;
   width: 800px;
-  padding: 10px
-  
+  padding: 10px;
+}
+
+.help-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

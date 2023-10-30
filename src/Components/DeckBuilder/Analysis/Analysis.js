@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { url_cards } from "../DeckBuilder";
 import RideDeck from "./RideDeck";
 import MainDeck from "./MainDeck";
 import Triggers from "./Triggers";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -25,7 +26,7 @@ export const renderName = (id, datas) => {
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_deck = `${URL}/deck/byPlayer`;
-const url_player=`${URL}/player`;
+const url_player = `${URL}/player`;
 
 export default function Analysis() {
   const [deck, setDeck] = useState();
@@ -33,9 +34,11 @@ export default function Analysis() {
   const [triggers, setTriggers] = useState([]);
   const [mainDeck, setMainDeck] = useState([]);
   const [originalCardpool, setOriginalCardpool] = useState(null);
-  const [player, setPlayer]= useState(null);
+  const [player, setPlayer] = useState(null);
+  const [accessToken, setAccessToken] = useState("");
 
-  const{user}= useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const navigate = useNavigate();
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -87,25 +90,24 @@ export default function Analysis() {
         console.error("Error: ", error.message);
       }
     };
-    const fetchPlayerData=async()=>{
+    const fetchPlayerData = async () => {
       try {
         const response = await fetch(url_player, {
           method: "GET",
         });
-  
+
         const data = await response.json();
         for (const acc in data) {
           if (user.nickname === data[acc].player_name) {
-            setPlayer(data[acc])
+            setPlayer(data[acc]);
             break;
           }
         }
       } catch (error) {
         console.error("Error: ", error.message);
       }
-     
-    }
-    if(!player){
+    };
+    if (!player) {
       fetchPlayerData();
     }
     if (!deck && player) {
@@ -141,6 +143,44 @@ export default function Analysis() {
     }
   }, [name, deck, rideDeck, originalCardpool, user, player]);
 
+  const deleteDeck = async () => {
+    const confirmed = window.confirm(
+      "Deletion is irreversible! \n Are you sure you want to delete this deck?"
+    );
+
+    if (confirmed) {
+      if (isAuthenticated) {
+        try {
+          const token = await getAccessTokenSilently();
+          setAccessToken(token);
+
+          // Now that you have the accessToken, proceed with the delete operation
+          const response = await fetch(`${URL}/deck/${deck.id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          if (response.ok) {
+            // Handle successful response if needed
+            alert("Deck deleted!");
+          } else {
+            const errorData = await response.json();
+            console.error("Error:", errorData);
+            alert(`Failed to delete deck. Error: ${errorData.message}`);
+          }
+
+          // Navigate after successful deletion
+          navigate(`/`);
+        } catch (error) {
+          console.error("Error: ", error.message);
+        }
+      }
+    }
+  };
+
   return (
     <div>
       {deck && (
@@ -155,14 +195,20 @@ export default function Analysis() {
 
           <br />
           <Button variant="contained">Export image</Button>
-          <Button variant="outlined" endIcon={<SendIcon/>}>
-            <Link to={`/deckbuilder`}>
-              Go to list of cards
-            </Link>
+          <Button variant="outlined" endIcon={<SendIcon />}>
+            <Link to={`/deckbuilder`}>Go to list of cards</Link>
           </Button>
-          <Button variant="outlined" endIcon={<SendIcon/>}>
+          <Button variant="outlined" endIcon={<SendIcon />}>
             {" "}
             <Link to="/"> Back to homepage</Link>
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            endIcon={<DeleteIcon />}
+            onClick={deleteDeck}
+          >
+            Delete Deck
           </Button>
         </div>
       )}
