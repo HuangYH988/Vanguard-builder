@@ -290,13 +290,14 @@ export default function DeckBuild() {
 
   const onClick = (event, card) => {
     const id = card.id;
-    console.log(id);
+    //console.log(id);
     const grade = parseInt(card.grade, 10);
-    const isUnit = card.cardType === "Unit";
+    const isUnit = card.card_type === "Unit";
     const isTrigger = card.trigger;
     if (!numOfCards[id] || numOfCards[id] < 4) {
       if (event.ctrlKey && isUnit) {
         // Set card as ride deck if it is unit and of g0-g3
+
         const rideKey = `g${grade}`;
         if (!rideDeckState[rideKey]) {
           setShowRideDeck((prevState) => ({ ...prevState, [id]: true }));
