@@ -62,8 +62,8 @@ export default function Filter(props) {
       filterCond.push(orderType);
       nullArray.push(null);
     }
-    filterCond.push(isCounterCharge,isSoulCharge)
-    nullArray.push(null,null)
+    filterCond.push(isCounterCharge, isSoulCharge);
+    nullArray.push(null, null);
     onFilterSelect(filterCond);
   };
 
@@ -74,7 +74,7 @@ export default function Filter(props) {
     onFilterSelect(nullArray);
     setNameFilter("");
     setIsCounterCharge(false);
-    setIsSoulCharge(false)
+    setIsSoulCharge(false);
   };
 
   // Define the options for the second select based on the first select value
@@ -108,7 +108,11 @@ export default function Filter(props) {
     }[unitOrder] || [];
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={handleCloseModal}
+      style={customStyles}
+    >
       <div style={customStyles.modalBackground}></div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
@@ -118,33 +122,37 @@ export default function Filter(props) {
           X
         </button>
       </div>
-      <h3>Search by set:</h3>
-      <select value={selectedSet} onChange={handleSelectChange}>
-        <option>Select the set:</option>
-        <option>Start/Trial Decks</option>
-        <option>Booster Sets</option>
-        <option>Special Sets</option>
-        <option value="PR">Promos</option>
-      </select>
+      <div className="filter-cond">
+        <h3>Search by set:</h3>
+        <select value={selectedSet} onChange={handleSelectChange}>
+          <option>Select the set:</option>
+          <option>Start/Trial Decks</option>
+          <option>Booster Sets</option>
+          <option>Special Sets</option>
+          <option value="PR">Promos</option>
+        </select>
 
-      {selectedSet && (
-        <div>
-          <div>Select the sub-set:</div>
-          <select
-            value={selectedSubSet}
-            onChange={handleSubSetChange}
-            disabled={!subSetOptions || Object.keys(subSetOptions).length === 0}
-          >
-            <option>Select sub-set:</option>
-            {Object.entries(subSetOptions).map(([key, value], index) => (
-              <option key={index} value={key}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      <div>
+        {selectedSet && (
+          <div>
+            <div>Select the sub-set:</div>
+            <select
+              value={selectedSubSet}
+              onChange={handleSubSetChange}
+              disabled={
+                !subSetOptions || Object.keys(subSetOptions).length === 0
+              }
+            >
+              <option>Select sub-set:</option>
+              {Object.entries(subSetOptions).map(([key, value], index) => (
+                <option key={index} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+      <div className="filter-cond">
         <h3 className="form-labels">Search by card name:</h3>
         <input
           type="text"
@@ -153,29 +161,31 @@ export default function Filter(props) {
           placeholder="name"
         />
       </div>
-      <h3>Unit/Order:</h3>
-      <select value={unitOrder} onChange={handleSelectChange2}>
-        <option value="Unit">Unit</option>
-        <option>Order</option>
-      </select>
-      {unitOrder && (
-        <div>
-          <div>Select the sub-set:</div>
-          <select
-            value={orderType}
-            onChange={handleSubSetChange2}
-            disabled={!orderOptions || Object.keys(orderOptions).length === 0}
-          >
-            <option>Select order type:</option>
-            {Object.entries(orderOptions).map(([key, value], index) => (
-              <option key={index} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      <div>
+      <div className="filter-cond">
+        <h3>Unit/Order:</h3>
+        <select value={unitOrder} onChange={handleSelectChange2}>
+          <option value="Unit">Unit</option>
+          <option>Order</option>
+        </select>
+        {unitOrder && (
+          <div>
+            <div>Select order type:</div>
+            <select
+              value={orderType}
+              onChange={handleSubSetChange2}
+              disabled={!orderOptions || Object.keys(orderOptions).length === 0}
+            >
+              <option>Select order type:</option>
+              {Object.entries(orderOptions).map(([key, value], index) => (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+      <div className="filter-cond">
         <h3>Counter Charge:</h3>
         <input
           type="checkbox"
@@ -183,7 +193,7 @@ export default function Filter(props) {
           onChange={handleIsCounterChargeChange}
         />
       </div>
-      <div>
+      <div className="filter-cond">
         <h3>Soul Charge:</h3>
         <input
           type="checkbox"
@@ -193,8 +203,12 @@ export default function Filter(props) {
       </div>
 
       <br />
-      <Button variant="contained" onClick={handleCloseModal}>Filter</Button>
-      <Button variant="contained" color="secondary" onClick={handleResetFilter}>Reset filter</Button>
+      <Button variant="contained" onClick={handleCloseModal}>
+        Filter
+      </Button>
+      <Button variant="contained" color="secondary" onClick={handleResetFilter}>
+        Reset filter
+      </Button>
     </Modal>
   );
 }

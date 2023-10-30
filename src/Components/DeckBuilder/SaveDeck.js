@@ -78,7 +78,7 @@ export default function SaveDeck(prop) {
       i++;
     }
   }
-  
+
   for (const id in mainDeck) {
     deckList2.push(mainDeck[id]);
   }
@@ -147,7 +147,6 @@ export default function SaveDeck(prop) {
   }
 
   async function editDeck(id) {
-    
     if (!isAuthenticated) {
       alert("You need to login first before you can save a deck list.");
     }
@@ -157,7 +156,7 @@ export default function SaveDeck(prop) {
         "Your deck is not legitimate. Please make appropriate changes to your deck first."
       );
     } else {
-      let requestData={}
+      let requestData = {};
       if (deckName) {
         requestData = {
           deck_name: deckName,
@@ -166,7 +165,7 @@ export default function SaveDeck(prop) {
           triggers: triggersList,
         };
       } else {
-      requestData = {
+        requestData = {
           main_deck: deckList2,
           ride_deck: rideDeckList,
           triggers: triggersList,
@@ -201,7 +200,11 @@ export default function SaveDeck(prop) {
     onClose();
   };
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={handleCloseModal}
+      style={customStyles}
+    >
       <div style={customStyles.modalBackground2}></div>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
@@ -210,6 +213,40 @@ export default function SaveDeck(prop) {
         >
           X
         </button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center", // Center horizontally
+        }}
+      >
+        <div className="legit-checkers">
+          {i === 4 && triggersList.length === 16 && deckSize === 50 ? (
+            <div>You have met all the deck requirements</div>
+          ) : (
+            <div>You have not met all the deck requirements</div>
+          )}
+          <div
+            className="deck-require"
+            style={{ backgroundColor: i === 4 ? "green" : "red" }}
+          >
+            Ride Deck: {i}/4
+          </div>
+          <div
+            className="deck-require"
+            style={{
+              backgroundColor: triggersList.length === 16 ? "green" : "red",
+            }}
+          >
+            Triggers: {triggersList.length}/16
+          </div>
+          <div
+            className="deck-require"
+            style={{ backgroundColor: deckSize === 50 ? "green" : "red" }}
+          >
+            Main Deck: {deckSize}/50
+          </div>
+        </div>
       </div>
       <div>
         <h2>Save as new deck:</h2>
@@ -222,29 +259,29 @@ export default function SaveDeck(prop) {
             placeholder="name"
           />
           <div>
-            <Button type="submit" variant="contained" color="secondary">Save Deck</Button>
+            <Button type="submit" variant="contained" color="secondary">
+              Save Deck
+            </Button>
           </div>
         </form>
       </div>
       <div>
         <h2>Or as exisitng deck:</h2>
         {deckList && (
-        <div>
-          {Object.values(deckList).map((deck) => (
-            <li key={deck.deck_name}>
-              <Button onClick={() => editDeck(deck.id)} variant="contained" color="secondary">
-                {deck.deck_name}
-              </Button>
-            </li>
-          ))}
-        </div>
-      )}
-        
-      </div>
-      <div clasName="legit-checkers">
-        <div>Ride Deck: {i}/4</div>
-        <div>Triggers: {triggersList.length}/16</div>
-        <div>Main Deck: {deckSize}/50</div>
+          <div>
+            {Object.values(deckList).map((deck) => (
+              <li key={deck.deck_name}>
+                <Button
+                  onClick={() => editDeck(deck.id)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  {deck.deck_name}
+                </Button>
+              </li>
+            ))}
+          </div>
+        )}
       </div>
     </Modal>
   );

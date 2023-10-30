@@ -151,7 +151,30 @@
   border-top-right-radius: 50px; 
 }
 
-.legit-checkers div {
-  display: inline-block;
+.legit-checkers {
+  display: flex;
+ 
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: rgb(245, 245, 120);
+  height: 120px;
+  width: 700px;
 }
 
+.deck-require {
+  background-color: red;
+
+  display: inline-block;
+  height: 95px;
+  width: 200px;
+  border: 1px solid black;  
+}
+
+.deck-require2{
+  background-color: green;
+
+  display: inline-block;
+  height: 95px;
+  width: 200px;
+  border: 1px solid black; 
+}
