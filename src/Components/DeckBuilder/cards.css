@@ -170,11 +170,14 @@
   border: 1px solid black;  
 }
 
-.deck-require2{
-  background-color: green;
-
-  display: inline-block;
-  height: 95px;
-  width: 200px;
-  border: 1px solid black; 
+.about-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.about-description{
+  border: 1px solid black;
+  width: 800px;
+  padding: 10px
+  
 }

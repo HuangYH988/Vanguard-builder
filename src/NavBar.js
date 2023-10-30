@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { usePlayerContext } from "./PlayerContext";
+import FAQ from "./Components/Information/FAQ";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const url_player = `${URL}/player`;
@@ -12,7 +13,7 @@ export default function NavBar() {
   const [userList, setUserList] = useState(null);
   const { player, setPlayer } = usePlayerContext();
   const [accessToken, setAccessToken] = useState("");
-
+const[openFAQ, setOpenFAQ]=useState(false);
   
 
   useEffect(() => {
@@ -90,22 +91,40 @@ export default function NavBar() {
     }
   },[userList, isAuthenticated, player,setPlayer, user, getAccessTokenSilently,loginWithRedirect, accessToken]);
 
+  const openModal = () => {
+    setOpenFAQ(true);
+  };
+  const closeModal = () => {
+    setOpenFAQ(false);
+
+    
+  };
   return (
     <AppBar position="static" style={{ backgroundColor: "#e1f4fa" }}>
        
       <Toolbar style={{ justifyContent: "flex-start" }}>
         <Typography variant="body1" style={{ color: "#063846" }}>
+        <Button variant="outlined">
           <Link to="/" style={{ textDecoration: "none" }}>
             HOME
           </Link>
+          </Button>
         </Typography>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         
         <Typography variant="body1" style={{ color: "#063846" }}>
-          <Link to="/about" style={{ textDecoration: "none" }}>
+         
+          <Button variant="outlined" onClick={openModal}>
             FAQ
-          </Link>
+            </Button>
         </Typography>
+        <FAQ
+          isOpen={openFAQ}
+          onClose={() => closeModal()}
+          
+            
+          
+        />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <div style={{ flexGrow: 1 }}></div>
         {isAuthenticated ? (

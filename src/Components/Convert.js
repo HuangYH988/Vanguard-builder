@@ -53,7 +53,7 @@ export const customStyles = {
     paddingBottom: "0px",
     display: "block",
     position: "relative",
-    backgroundColor: "rgba(103, 189, 160, 0.95)",
+    backgroundColor: "rgba(142, 235, 204, 0.95)",
     border: "2px solid #072f49",
     borderRadius: "30px",
     top: "50%",

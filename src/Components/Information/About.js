@@ -17,7 +17,7 @@ export default function About() {
           franchise also have related products in other areas such as anime and
           manga series, as well as video games and novels.{" "}
         </p>
-        <p>More information on Cardfight!! Vanguard:</p>
+        <h4>More information on Cardfight!! Vanguard:</h4>
         <Button variant="contianed" endIcon={<SendIcon />}>
           <Link to="https://en.cf-vanguard.com/">Official Vanguard Page</Link>
         </Button>
