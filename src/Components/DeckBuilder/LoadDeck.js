@@ -47,35 +47,45 @@ export default function LoadDeck(prop) {
     }
 
     if (deck) {
-      
       loadADeck(deck);
       onClose();
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} style={customStyles}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={handleCloseModal}
+      style={customStyles}
+    >
       <div style={customStyles.modalBackground2}></div>
-      <h2>Select a deck</h2>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
-          onClick={handleCloseModal}
-          style={{ cursor: "pointer", padding: "5px" }}
-        >
-          X
-        </button>
-      </div>
-      {deckList && (
-        <div>
-          {Object.values(deckList).map((deck) => (
-            <li key={deck.deck_name}>
-              <Button onClick={() => loadDeck(deck.deck_name)} variant="contained" color="success">
-                {deck.deck_name}
-              </Button>
-            </li>
-          ))}
+          <button
+            onClick={handleCloseModal}
+            style={{ cursor: "pointer", padding: "5px" }}
+          >
+            X
+          </button>
         </div>
-      )}
+      <div className="modal-part3">
+        <div><h2>Select a deck to load:</h2></div>
+        
+        {deckList && (
+          <div>
+            {Object.values(deckList).map((deck) => (
+              <li key={deck.deck_name}>
+                <Button
+                  onClick={() => loadDeck(deck.deck_name)}
+                  variant="contained"
+                  color="success"
+                >
+                  {deck.deck_name}
+                </Button>
+              </li>
+            ))}
+          </div>
+        )}
+      </div>
     </Modal>
   );
 }

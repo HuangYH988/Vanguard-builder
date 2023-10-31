@@ -251,51 +251,57 @@ export default function SaveDeck(prop) {
             className="deck-require"
             style={{
               backgroundColor: deckSize === 50 ? "green" : "red",
-              color:
-                deckSize === 50 ? "rgb(93, 215, 239)" : "rgb(130, 130, 6)",
+              color: deckSize === 50 ? "rgb(93, 215, 239)" : "rgb(130, 130, 6)",
             }}
           >
             Main Deck: {deckSize}/50
           </div>
         </div>
       </div>
-      <div>
-        <form onSubmit={saveDeck}>
-          <h2 className="form-labels">
-            Give your deck a name (compulsory for new deck, not compulsory for
-            editting exisitng deck)
-          </h2>
-          <input
-            type="text"
-            value={deckName}
-            onChange={(e) => setDeckName(e.target.value)}
-            placeholder="name"
-          />
-          <h3>Save as new deck:</h3>
-          <div>
-            <Button type="submit" variant="contained" color="secondary">
-              Save Deck
-            </Button>
-          </div>
-        </form>
+      <div className="modal-part1">
+        <h2 className="form-labels">
+          Give your deck a name (compulsory for new deck, not compulsory for
+          editting exisitng deck)
+        </h2>
       </div>
-      <div>
-        <h3>Or as exisitng deck:</h3>
-        {deckList && (
-          <div>
-            {Object.values(deckList).map((deck) => (
-              <li key={deck.deck_name}>
-                <Button
-                  onClick={() => editDeck(deck.id)}
-                  variant="contained"
-                  color="secondary"
-                >
-                  {deck.deck_name}
-                </Button>
-              </li>
-            ))}
-          </div>
-        )}
+      <div className="modal-part1">
+        <input
+          type="text"
+          value={deckName}
+          onChange={(e) => setDeckName(e.target.value)}
+          placeholder="name"
+        />
+      </div>
+<br/>
+      <div className="modal-part2">
+        <div>
+          <form onSubmit={saveDeck}>
+            <h2>Save as new deck:</h2>
+            <div>
+              <Button type="submit" variant="contained" color="secondary">
+                Save Deck
+              </Button>
+            </div>
+          </form>
+        </div>
+        <div>
+          <h2>Or replace an exisitng deck:</h2>
+          {deckList && (
+            <div>
+              {Object.values(deckList).map((deck) => (
+                <li key={deck.deck_name}>
+                  <Button
+                    onClick={() => editDeck(deck.id)}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    {deck.deck_name}
+                  </Button>
+                </li>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </Modal>
   );

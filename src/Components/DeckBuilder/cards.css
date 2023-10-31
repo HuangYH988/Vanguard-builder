@@ -161,6 +161,8 @@
   background-color: rgb(245, 245, 120);
   height: 120px;
   width: 700px;
+  padding:5px;
+  font-weight: bold;
 }
 
 .deck-require {
@@ -177,8 +179,6 @@
   
 }
 
-
-
 .about-container {
   display: flex;
   flex-direction: column;
@@ -188,10 +188,46 @@
   border: 1px solid black;
   width: 800px;
   padding: 10px;
+  background-color: rgba(240, 255, 255, 0.7);
 }
 
 .help-text {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.modal-part1{
+  display: flex;
+  justify-content: center;
+  
+}
+.modal-part2{
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; 
+}
+.modal-part3{
+  display: inline-block;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.filter-cond {
+  margin: 10px;
+  /* Add other styling as needed */
 }

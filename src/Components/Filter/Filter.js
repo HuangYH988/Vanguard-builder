@@ -8,6 +8,7 @@ export default function Filter(props) {
   const [selectedSet, setSelectedSet] = useState("");
   const [selectedSubSet, setSelectedSubSet] = useState("");
   const [nameFilter, setNameFilter] = useState("");
+  const [effectFilter, setEffectFilter] = useState("");
   const [isSoulCharge, setIsSoulCharge] = useState(false);
   const [isCounterCharge, setIsCounterCharge] = useState(false);
   const [unitOrder, setUnitOrder] = useState("");
@@ -45,25 +46,24 @@ export default function Filter(props) {
     onClose();
     if (selectedSet === "PR") {
       filterCond.push("PR");
-      nullArray.push(null);
     } else {
       filterCond.push(selectedSubSet);
-      nullArray.push(null);
     }
     filterCond.push(nameFilter);
-    nullArray.push(null);
+
     if (unitOrder === "Unit") {
       filterCond.push("Unit");
-      nullArray.push(null);
     } else if (orderType === "Any") {
       filterCond.push("Order");
-      nullArray.push(null);
     } else {
       filterCond.push(orderType);
+    }
+    filterCond.push(effectFilter);
+    filterCond.push(isCounterCharge, isSoulCharge);
+    for (let i = 0; i < filterCond.length; i++) {
       nullArray.push(null);
     }
-    filterCond.push(isCounterCharge, isSoulCharge);
-    nullArray.push(null, null);
+
     onFilterSelect(filterCond);
   };
 
@@ -95,7 +95,9 @@ export default function Filter(props) {
         BT04: "D Booster Set 04: Awakening of Chakrabarthi",
         BT05: "D Booster Set 05: Triumphant Return of the Brave Heroes",
       },
-      "Special sets:": {},
+      "Special sets:": {
+        SS01: "D Special Series 01: Festival Collection 2021",
+      },
     }[selectedSet] || [];
   const orderOptions =
     {
@@ -122,86 +124,102 @@ export default function Filter(props) {
           X
         </button>
       </div>
-      <div className="filter-cond">
-        <h3>Search by set:</h3>
-        <select value={selectedSet} onChange={handleSelectChange}>
-          <option>Select the set:</option>
-          <option>Start/Trial Decks</option>
-          <option>Booster Sets</option>
-          <option>Special Sets</option>
-          <option value="PR">Promos</option>
-        </select>
-
-        {selectedSet && (
-          <div>
-            <div>Select the sub-set:</div>
-            <select
-              value={selectedSubSet}
-              onChange={handleSubSetChange}
-              disabled={
-                !subSetOptions || Object.keys(subSetOptions).length === 0
-              }
-            >
-              <option>Select sub-set:</option>
-              {Object.entries(subSetOptions).map(([key, value], index) => (
-                <option key={index} value={key}>
-                  {value}
-                </option>
-              ))}
+      <div className="filter-container">
+        <div className="filter-row">
+          <div className="filter-cond">
+            <h3>Search by set:</h3>
+            <select value={selectedSet} onChange={handleSelectChange}>
+              <option>Select the set:</option>
+              <option>Start/Trial Decks</option>
+              <option>Booster Sets</option>
+              <option>Special Sets</option>
+              <option value="PR">Promos</option>
             </select>
-          </div>
-        )}
-      </div>
-      <div className="filter-cond">
-        <h3 className="form-labels">Search by card name:</h3>
-        <input
-          type="text"
-          value={nameFilter}
-          onChange={(e) => setNameFilter(e.target.value)}
-          placeholder="name"
-        />
-      </div>
-      <div className="filter-cond">
-        <h3>Unit/Order:</h3>
-        <select value={unitOrder} onChange={handleSelectChange2}>
-          <option value="Unit">Unit</option>
-          <option>Order</option>
-        </select>
-        {unitOrder && (
-          <div>
-            <div>Select order type:</div>
-            <select
-              value={orderType}
-              onChange={handleSubSetChange2}
-              disabled={!orderOptions || Object.keys(orderOptions).length === 0}
-            >
-              <option>Select order type:</option>
-              {Object.entries(orderOptions).map(([key, value], index) => (
-                <option key={index} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-      </div>
-      <div className="filter-cond">
-        <h3>Counter Charge:</h3>
-        <input
-          type="checkbox"
-          checked={isCounterCharge}
-          onChange={handleIsCounterChargeChange}
-        />
-      </div>
-      <div className="filter-cond">
-        <h3>Soul Charge:</h3>
-        <input
-          type="checkbox"
-          checked={isSoulCharge}
-          onChange={handleIsSoulChargeChange}
-        />
-      </div>
 
+            {selectedSet && (
+              <div>
+                <div>Select the sub-set:</div>
+                <select
+                  value={selectedSubSet}
+                  onChange={handleSubSetChange}
+                  disabled={
+                    !subSetOptions || Object.keys(subSetOptions).length === 0
+                  }
+                >
+                  <option>Select sub-set:</option>
+                  {Object.entries(subSetOptions).map(([key, value], index) => (
+                    <option key={index} value={key}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+          <div className="filter-cond">
+            <h3 className="form-labels">Search by card name:</h3>
+            <input
+              type="text"
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+              placeholder="name"
+            />
+          </div>
+          <div className="filter-cond">
+            <h3>Unit/Order:</h3>
+            <select value={unitOrder} onChange={handleSelectChange2}>
+              <option value="Unit">Unit</option>
+              <option>Order</option>
+            </select>
+            {unitOrder && (
+              <div>
+                <div>Select order type:</div>
+                <select
+                  value={orderType}
+                  onChange={handleSubSetChange2}
+                  disabled={
+                    !orderOptions || Object.keys(orderOptions).length === 0
+                  }
+                >
+                  <option>Select order type:</option>
+                  {Object.entries(orderOptions).map(([key, value], index) => (
+                    <option key={index} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="filter-row">
+          <div className="filter-cond">
+            <h3 className="form-labels">Search by card effect:</h3>
+            <input
+              type="text"
+              value={effectFilter}
+              onChange={(e) => setEffectFilter(e.target.value)}
+              placeholder="effect"
+            />
+          </div>
+          <div className="filter-cond">
+            <h3>Counter Charge:</h3>
+            <input
+              type="checkbox"
+              checked={isCounterCharge}
+              onChange={handleIsCounterChargeChange}
+            />
+          </div>
+          <div className="filter-cond">
+            <h3>Soul Charge:</h3>
+            <input
+              type="checkbox"
+              checked={isSoulCharge}
+              onChange={handleIsSoulChargeChange}
+            />
+          </div>
+        </div>
+      </div>
       <br />
       <Button variant="contained" onClick={handleCloseModal}>
         Filter

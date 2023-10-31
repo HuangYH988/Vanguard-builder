@@ -34,6 +34,7 @@ export default function DeckBuild() {
     nation: "Dragon Empire",
     cardName: null,
     cardType: null,
+    cardEffect: null,
     hasCC: false,
     hasSC: false,
   });
@@ -253,7 +254,9 @@ export default function DeckBuild() {
         : filterByGradeNation;
       const filteredCards2 = filters.cardName
         ? filteredCards.filter((card) =>
-            card.cardName.toLowerCase().includes(filters.cardName.toLowerCase())
+            card.card_name
+              .toLowerCase()
+              .includes(filters.cardName.toLowerCase())
           )
         : filteredCards;
       const filteredCard3 = filters.cardType
@@ -267,8 +270,14 @@ export default function DeckBuild() {
       const filteredCard5 = filters.hasSC
         ? filteredCard4.filter((card) => card.soul_charge)
         : filteredCard4;
+      const filteredCard6 = filters.cardEffect
+        ? filteredCard5.filter((card) =>
+        
+            card.effect ? (card.effect.toLowerCase().includes(filters.cardEffect.toLowerCase())) :false
+          )
+        : filteredCard5;
       // Update the state with the filtered cards
-      setFilteredCardpool(filteredCard5);
+      setFilteredCardpool(filteredCard6);
     }
   }, [originalCardpool, filters]);
 
@@ -568,8 +577,9 @@ export default function DeckBuild() {
               cardSet: filterCond[0],
               cardName: filterCond[1],
               cardType: filterCond[2],
-              hasCC: filterCond[3],
-              hasSC: filterCond[4],
+              cardEffect: filterCond[3],
+              hasCC: filterCond[4],
+              hasSC: filterCond[5],
             });
           }}
         />

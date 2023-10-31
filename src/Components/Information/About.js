@@ -30,7 +30,7 @@ export default function About() {
       <div className="about-description"><h2>About Vanguard Builder</h2>
       <p>Vanguard Builder is a fan made application which vanguard players can use to 
         search for certain cards from specific sets or having specific effects. Players 
-        may also use this to construct their very own vanguard decks.</p></div>
+        may also use this application to construct their very own vanguard decks.</p></div>
     </div>
   );
 }
