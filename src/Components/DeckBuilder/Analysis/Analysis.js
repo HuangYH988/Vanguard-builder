@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
+//import html2canvas from "html2canvas";
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -36,6 +37,7 @@ export default function Analysis() {
   const [originalCardpool, setOriginalCardpool] = useState(null);
   const [player, setPlayer] = useState(null);
   const [accessToken, setAccessToken] = useState("");
+  const [downloads, setDownloads] = useState(null);
 
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
@@ -59,6 +61,50 @@ export default function Analysis() {
       }
     }
   };
+
+  const exportImage = async () => {
+  try {
+    const response = await fetch(`${URL}/deck/getImage/${deck.id}`, {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(blob);
+
+      // Create an image element and set its source to the URL
+      const imgElement = document.createElement("img");
+      imgElement.src = url;
+
+      // Wait for the image to load
+      imgElement.onload = () => {
+        // Append the image to the body
+        //document.body.appendChild(imgElement);
+
+        // Use setTimeout to add a delay before initiating the download
+        setTimeout(() => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "deck-image.png";
+          a.style.display = "none";
+          //document.body.appendChild(a);
+          a.click();
+
+          // Clean up the URL object
+          window.URL.revokeObjectURL(url);
+        }, 2000); // Adjust the delay time (in milliseconds) as needed
+      };
+    } else {
+      alert("Error generating deck image");
+    }
+  } catch (error) {
+    alert("Error generating deck image");
+    console.error("Error generating deck image", error.message);
+  }
+};
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -141,6 +187,7 @@ export default function Analysis() {
       setTriggers(triggerList);
       setMainDeck(deckList);
     }
+    setDownloads(null);
   }, [name, deck, rideDeck, originalCardpool, user, player]);
 
   const deleteDeck = async () => {
@@ -194,7 +241,14 @@ export default function Analysis() {
           <MainDeck mainDeck={mainDeck} cardpool={originalCardpool} />
 
           <br />
-          <Button variant="contained">Export image</Button>
+          <Button variant="contained" onClick={exportImage}>
+            Export image
+          </Button>
+          {downloads && (
+            <a href={downloads} download="combined_images.png">
+              Click here to download the combined image
+            </a>
+          )}
           <Button variant="outlined" endIcon={<SendIcon />}>
             <Link to={`/deckbuilder`}>Go to list of cards</Link>
           </Button>
