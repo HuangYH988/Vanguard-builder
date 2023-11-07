@@ -231,3 +231,8 @@
   margin: 10px;
   /* Add other styling as needed */
 }
+
+.hand-card{
+  display: inline-block;
+  margin:5px
+}

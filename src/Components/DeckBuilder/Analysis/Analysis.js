@@ -8,7 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
-//import html2canvas from "html2canvas";
+import SampleHand from "./SampleHand";
 
 export const renderImage = (id, datas) => {
   for (const card in datas) {
@@ -38,6 +38,7 @@ export default function Analysis() {
   const [player, setPlayer] = useState(null);
   const [accessToken, setAccessToken] = useState("");
   const [downloads, setDownloads] = useState(null);
+  const [isHand, setIsHand]= useState(false);
 
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
@@ -227,6 +228,12 @@ export default function Analysis() {
       }
     }
   };
+  const openModal = () => {
+    setIsHand(true);
+  };
+  const closeModal = () => {
+    setIsHand(false);
+  };
 
   return (
     <div>
@@ -249,9 +256,9 @@ export default function Analysis() {
               Click here to download the combined image
             </a>
           )}
-          <Button variant="outlined" endIcon={<SendIcon />}>
-            <Link to={`/deckbuilder`}>Go to list of cards</Link>
-          </Button>
+          
+          <Button variant="contained" onClick={openModal}>Draw Opening Hand</Button> 
+           <SampleHand isOpen={isHand} onClose={closeModal} trigger={triggers} main={mainDeck} />
           <Button variant="outlined" endIcon={<SendIcon />}>
             {" "}
             <Link to="/"> Back to homepage</Link>
@@ -264,6 +271,7 @@ export default function Analysis() {
           >
             Delete Deck
           </Button>
+          
         </div>
       )}
     </div>

@@ -272,8 +272,11 @@ export default function DeckBuild() {
         : filteredCard4;
       const filteredCard6 = filters.cardEffect
         ? filteredCard5.filter((card) =>
-        
-            card.effect ? (card.effect.toLowerCase().includes(filters.cardEffect.toLowerCase())) :false
+            card.effect
+              ? card.effect
+                  .toLowerCase()
+                  .includes(filters.cardEffect.toLowerCase())
+              : false
           )
         : filteredCard5;
       // Update the state with the filtered cards
@@ -303,7 +306,11 @@ export default function DeckBuild() {
     const grade = parseInt(card.grade, 10);
     const isUnit = card.card_type === "Unit";
     const isTrigger = card.trigger;
-    if (!numOfCards[id] || numOfCards[id] < 4) {
+    if (
+      !numOfCards[id] ||
+      (id !== "419" && numOfCards[id] < 4) ||
+      (id === "419" && numOfCards["419"] < 16)
+    ) {
       if (event.ctrlKey && isUnit) {
         // Set card as ride deck if it is unit and of g0-g3
 
