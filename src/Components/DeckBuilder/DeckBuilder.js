@@ -316,6 +316,7 @@ export default function DeckBuild() {
 
         const rideKey = `g${grade}`;
         if (!rideDeckState[rideKey]) {
+          // Display this card as ride dck and set it into ride deck array
           setShowRideDeck((prevState) => ({ ...prevState, [id]: true }));
           setRideDeckState((prevState) => ({ ...prevState, [rideKey]: id }));
         } else {
@@ -324,15 +325,16 @@ export default function DeckBuild() {
       }
 
       const isVacancy = isDeckLimit();
-
-      if (isTrigger) {
-        setDifferentTriggers(id, isTrigger);
-      } else if (isVacancy) {
-        const newNumOfCards = numOfCards[id] ? numOfCards[id] + 1 : 1;
-        setNumOfCards((prevState) => ({ ...prevState, [id]: newNumOfCards }));
-        setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
-      } else {
-        alert("You have exceeded the upper limit of your deck");
+      if (!event.ctrlKey) {
+        if (isTrigger) {
+          setDifferentTriggers(id, isTrigger);
+        } else if (isVacancy) {
+          const newNumOfCards = numOfCards[id] ? numOfCards[id] + 1 : 1;
+          setNumOfCards((prevState) => ({ ...prevState, [id]: newNumOfCards }));
+          setMainDeckList((prevMainDeckList) => [...prevMainDeckList, id]);
+        } else {
+          alert("You have exceeded the upper limit of your deck");
+        }
       }
     } else {
       alert("You can only have up to 4 copies of a card in your deck!");
