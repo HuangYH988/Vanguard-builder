@@ -302,7 +302,7 @@ export default function DeckBuild() {
 
   const onClick = (event, card) => {
     const id = card.id;
-    //console.log(id);
+    console.log(id);
     const grade = parseInt(card.grade, 10);
     const isUnit = card.card_type === "Unit";
     const isTrigger = card.trigger;
@@ -319,6 +319,8 @@ export default function DeckBuild() {
           // Display this card as ride dck and set it into ride deck array
           setShowRideDeck((prevState) => ({ ...prevState, [id]: true }));
           setRideDeckState((prevState) => ({ ...prevState, [rideKey]: id }));
+          const newNumOfCards = numOfCards[id] ? numOfCards[id] + 1 : 1;
+          setNumOfCards((prevState) => ({ ...prevState, [id]: newNumOfCards }));
         } else {
           alert("Warning: Cannot set this card as your ride deck!");
         }
